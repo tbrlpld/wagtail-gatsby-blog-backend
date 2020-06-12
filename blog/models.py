@@ -21,7 +21,20 @@ class BlogIndexPage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
+
         blogposts = self.get_children().live().order_by('-first_published_at')
+
+        context['blogposts'] = blogposts
+        return context
+
+
+class BlogTagIndexPage(Page):
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        tag = request.GET.get('tag')
+        blogposts = BlogPage.objects.filter_by(tags__name=tag)
+
         context['blogposts'] = blogposts
         return context
 
