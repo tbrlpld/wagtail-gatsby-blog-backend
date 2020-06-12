@@ -13,6 +13,11 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
+from grapple.models import (
+    GraphQLString,
+    GraphQLStreamfield,
+)
+
 
 class BlogIndexPage(Page):
     intro = RichTextField(blank=True)
@@ -60,7 +65,7 @@ class BlogPage(Page):
             ("paragraph", blocks.RichTextBlock()),
             ("image", ImageChooserBlock()),
         ],
-        blank=True
+        blank=True,
     )
     tags = ClusterTaggableManager(
         through=BlogPageTag,
@@ -85,6 +90,13 @@ class BlogPage(Page):
         FieldPanel('body', classname="full"),
         StreamFieldPanel('freeformbody'),
         InlinePanel('gallery_images', label='Gallery Images'),
+    ]
+
+    graphql_fields = [
+        GraphQLString("title"),
+        GraphQLString("date"),
+        GraphQLString("author"),
+        GraphQLStreamfield("freeformbody"),
     ]
 
 
