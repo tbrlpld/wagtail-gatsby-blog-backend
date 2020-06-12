@@ -173,7 +173,7 @@ GRAPHENE = {
     'SCHEMA': 'grapple.schema.schema',
 }
 GRAPPLE_APPS = {
-    # 'home': '',
+    'home': '',
     'blog': '',
 }
 
