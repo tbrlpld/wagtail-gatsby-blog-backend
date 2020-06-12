@@ -5,10 +5,12 @@ from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.core.models import Page, Orderable
-from wagtail.core.fields import RichTextField
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core import blocks
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
 
@@ -48,9 +50,18 @@ class BlogPageTag(TaggedItemBase):
 
 
 class BlogPage(Page):
+    author = models.CharField(max_length=250, blank=True)
     date = models.DateField('Post date')
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
+    freeformbody = StreamField(
+        [
+            ("heading", blocks.CharBlock(classname="full title")),
+            ("paragraph", blocks.RichTextBlock()),
+            ("image", ImageChooserBlock()),
+        ],
+        blank=True
+    )
     tags = ClusterTaggableManager(
         through=BlogPageTag,
         blank=True,
@@ -64,6 +75,7 @@ class BlogPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
+                FieldPanel('author'),
                 FieldPanel('date'),
                 FieldPanel('tags'),
             ],
@@ -71,7 +83,8 @@ class BlogPage(Page):
         ),
         FieldPanel('intro'),
         FieldPanel('body', classname="full"),
-        InlinePanel('gallery_images', label='Gallery Images')
+        StreamFieldPanel('freeformbody'),
+        InlinePanel('gallery_images', label='Gallery Images'),
     ]
 
 
