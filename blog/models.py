@@ -33,7 +33,7 @@ class BlogTagIndexPage(Page):
         context = super().get_context(request)
 
         tag = request.GET.get('tag')
-        blogposts = BlogPage.objects.filter_by(tags__name=tag)
+        blogposts = BlogPage.objects.filter(tags__name=tag)
 
         context['blogposts'] = blogposts
         return context
