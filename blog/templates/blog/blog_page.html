@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
@@ -12,5 +13,12 @@
     {{ page.intro }}
   </p>
   {{ page.body|richtext }}
+
+  {% for gallery_image in page.gallery_images.all %}
+    <picture>
+      {% image gallery_image.image fill-320x240 %}
+      <caption>{{ gallery_image.caption }}</caption>
+    </picture>
+  {% endfor %}
 
 {% endblock content %}

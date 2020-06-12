@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 from modelcluster.fields import ParentalKey
 
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -38,6 +38,7 @@ class BlogPage(Page):
         FieldPanel('date'),
         FieldPanel('intro'),
         FieldPanel('body', classname="full"),
+        InlinePanel('gallery_images', label='Gallery Images')
     ]
 
 
