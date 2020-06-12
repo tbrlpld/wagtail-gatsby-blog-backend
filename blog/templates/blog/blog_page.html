@@ -8,6 +8,9 @@
   <h1>{{ page.title }}</h1>
   <div>
     <small>{{ page.date }}</small>
+    {% for tag in page.tags.all %}
+      <a href="{% slugurl 'tags' %}?tag={{ tag }}"><small style="border: 1px solid lightgray; lineheight: 1em; border-radius: 1em; padding: 0 0.5em">{{ tag }}</small></a>
+    {% endfor %}
   </div>
   <p>
     {{ page.intro }}
