@@ -43,6 +43,10 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
 
+    'grapple',
+    'graphene_django',
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -162,3 +166,13 @@ WAGTAIL_SITE_NAME = "mysite"
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://example.com'
+
+
+# Grapple settings
+GRAPHENE = {
+    'schema': 'grapple.schema.schema',
+}
+GRAPPLE_APPS = {
+    'home': '',
+}
+
