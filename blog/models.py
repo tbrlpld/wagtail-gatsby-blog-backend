@@ -96,6 +96,8 @@ class BlogPage(Page):
         GraphQLString("title"),
         GraphQLString("date"),
         GraphQLString("author"),
+        GraphQLString("intro"),
+        GraphQLString("body"),
         GraphQLStreamfield("freeformbody"),
     ]
 
