@@ -14,6 +14,7 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
 from grapple.models import (
+    GraphQLField,
     GraphQLInt,
     GraphQLString,
     GraphQLStreamfield,
@@ -71,7 +72,6 @@ import graphene
 
 
 class FlatTags(graphene.String):
-
     @classmethod
     def serialize(cls, value):
         tagsList = []
@@ -85,7 +85,7 @@ def convert_tag_field_to_string(field, registry=None):
     return graphene.Field(
         FlatTags,
         description=field.help_text,
-        required=not field.null
+        required=not field.null,
     )
 
 
@@ -133,9 +133,7 @@ class BlogPage(Page):
         GraphQLString("author"),
         GraphQLString("intro"),
         GraphQLString("body"),
-        GraphQLString(
-            "tags",
-        ),
+        GraphQLString("tags"),
         GraphQLStreamfield("freeformbody"),
     ]
 

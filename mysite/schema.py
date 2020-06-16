@@ -22,5 +22,5 @@ class Subscription(GrappleSubscription):
 
 schema = graphene.Schema(
     query=Query,
-    subscription=Subscription,
+    subscription=GrappleSubscription,
 )
