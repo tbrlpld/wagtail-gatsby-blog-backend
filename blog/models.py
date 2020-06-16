@@ -61,8 +61,32 @@ class BlogPageTag(TaggedItemBase):
     graphql_fields = [
         GraphQLInt('id'),
         GraphQLInt('tag_id'),
+        GraphQLString('tag'),
         GraphQLForeignKey('content_object', 'blog.BlogPage'),
     ]
+
+
+from graphene_django.converter import convert_django_field
+import graphene
+
+
+class FlatTags(graphene.String):
+
+    @classmethod
+    def serialize(cls, value):
+        tagsList = []
+        for tag in value.all():
+            tagsList.append(tag.name)
+        return tagsList
+
+
+@convert_django_field.register(ClusterTaggableManager)
+def convert_tag_field_to_string(field, registry=None):
+    return graphene.Field(
+        FlatTags,
+        description=field.help_text,
+        required=not field.null
+    )
 
 
 class BlogPage(Page):
@@ -109,12 +133,9 @@ class BlogPage(Page):
         GraphQLString("author"),
         GraphQLString("intro"),
         GraphQLString("body"),
-        # GraphQLCollection(
-        #     GraphQLForeignKey,
-        #     "tags",
-        #     content_type="blog.BlogPageTag",
-        #     source="blog.BlogPageTag",
-        # ),
+        GraphQLString(
+            "tags",
+        ),
         GraphQLStreamfield("freeformbody"),
     ]
 
