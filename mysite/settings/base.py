@@ -176,4 +176,4 @@ GRAPPLE_APPS = {
     'home': '',
     'blog': '',
 }
-
+GRAPPLE_ADD_SEARCH_HIT=False
