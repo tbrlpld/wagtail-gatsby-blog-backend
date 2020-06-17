@@ -70,9 +70,32 @@ class BlogPageTag(TaggedItemBase):
 from graphene_django.converter import convert_django_field
 import graphene
 
+
+# @convert_django_field.register(ClusterTaggableManager)
+# def convert_tag_manager_to_string(field, registry=None):
+#     return graphene.String(description=field.help_text, required=not field.null)
+
 @convert_django_field.register(ClusterTaggableManager)
 def convert_tag_manager_to_string(field, registry=None):
-    return graphene.String(description=field.help_text, required=not field.null)
+    return TagType()
+
+
+class TagType(graphene.ObjectType):
+    tag_id = graphene.Int()
+    name = graphene.String()
+
+    def resolve_tag_id(self, info):
+        return self.id
+
+    def resolve_name(self, info):
+        return self.name
+
+
+def GraphQLTag(field_name: str, **kwargs):
+    def Mixin():
+        return GraphQLField(field_name, TagType, is_list=True, **kwargs)
+
+    return Mixin
 
 
 class BlogPage(Page):
@@ -119,8 +142,7 @@ class BlogPage(Page):
         GraphQLString("author"),
         GraphQLString("intro"),
         GraphQLString("body"),
-        GraphQLString("tags"),
-        # GraphQLCollection("tags"),
+        GraphQLTag("tags"),
         GraphQLStreamfield("freeformbody"),
     ]
 
