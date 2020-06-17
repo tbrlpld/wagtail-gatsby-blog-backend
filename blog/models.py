@@ -81,7 +81,7 @@ def convert_tag_manager_to_string(field, registry=None):
 
 
 class TagType(graphene.ObjectType):
-    tag_id = graphene.Int()
+    tag_id = graphene.Int(name="id")
     name = graphene.String()
 
     def resolve_tag_id(self, info):
@@ -93,9 +93,13 @@ class TagType(graphene.ObjectType):
 
 class TagQuery(graphene.ObjectType):
     tag = graphene.Field(TagType, tag_id=graphene.Int())
+    tags = graphene.List(TagType)
 
     def resolve_tag(self, info, tag_id):
         return BlogPage.tags.get(pk=tag_id)
+
+    def resolve_tags(self, info):
+        return BlogPage.tags.all().order_by("pk")
 
 
 def GraphQLTag(field_name: str, **kwargs):
