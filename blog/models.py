@@ -14,14 +14,11 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
 from grapple.models import (
-    GraphQLField,
-    GraphQLInt,
     GraphQLString,
     GraphQLStreamfield,
-    GraphQLCollection,
-    GraphQLForeignKey,
 )
-from grapple.helpers import register_query_field
+
+from blog.schema import GraphQLTags
 
 
 class BlogIndexPage(Page):
@@ -57,45 +54,6 @@ class BlogPageTag(TaggedItemBase):
         related_name='tagged_items',
         on_delete=models.CASCADE,
     )
-
-
-import graphene
-from graphene_django.converter import convert_django_field
-import taggit.models as tgt
-
-
-@convert_django_field.register(ClusterTaggableManager)
-def convert_tag_manager_to_string(field, registry=None):
-    return TagType()
-
-
-class TagType(graphene.ObjectType):
-    tag_id = graphene.Int(name="id")
-    name = graphene.String()
-
-    def resolve_tag_id(self, info):
-        return self.id
-
-    def resolve_name(self, info):
-        return self.name
-
-
-class TagQuery(graphene.ObjectType):
-    tag = graphene.Field(TagType, tag_id=graphene.Int())
-    tags = graphene.List(TagType)
-
-    def resolve_tag(self, info, tag_id):
-        return tgt.Tag.objects.get(pk=tag_id)
-
-    def resolve_tags(self, info):
-        return tgt.Tag.objects.all().order_by("pk")
-
-
-def GraphQLTags(field_name: str, **kwargs):
-    def Mixin():
-        return GraphQLField(field_name, TagType, is_list=True, **kwargs)
-
-    return Mixin
 
 
 class BlogPage(Page):
