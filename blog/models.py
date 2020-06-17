@@ -51,7 +51,6 @@ class BlogTagIndexPage(Page):
         return context
 
 
-@register_query_field('blogpagetag')
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
         'BlogPage',
@@ -59,21 +58,11 @@ class BlogPageTag(TaggedItemBase):
         on_delete=models.CASCADE,
     )
 
-    graphql_fields = [
-        GraphQLInt('id'),
-        GraphQLInt('tag_id'),
-        GraphQLString('tag'),
-        GraphQLForeignKey('content_object', 'blog.BlogPage'),
-    ]
 
-
-from graphene_django.converter import convert_django_field
 import graphene
+from graphene_django.converter import convert_django_field
+import taggit.models as tgt
 
-
-# @convert_django_field.register(ClusterTaggableManager)
-# def convert_tag_manager_to_string(field, registry=None):
-#     return graphene.String(description=field.help_text, required=not field.null)
 
 @convert_django_field.register(ClusterTaggableManager)
 def convert_tag_manager_to_string(field, registry=None):
@@ -96,13 +85,13 @@ class TagQuery(graphene.ObjectType):
     tags = graphene.List(TagType)
 
     def resolve_tag(self, info, tag_id):
-        return BlogPage.tags.get(pk=tag_id)
+        return tgt.Tag.objects.get(pk=tag_id)
 
     def resolve_tags(self, info):
-        return BlogPage.tags.all().order_by("pk")
+        return tgt.Tag.objects.all().order_by("pk")
 
 
-def GraphQLTag(field_name: str, **kwargs):
+def GraphQLTags(field_name: str, **kwargs):
     def Mixin():
         return GraphQLField(field_name, TagType, is_list=True, **kwargs)
 
@@ -153,7 +142,7 @@ class BlogPage(Page):
         GraphQLString("author"),
         GraphQLString("intro"),
         GraphQLString("body"),
-        GraphQLTag("tags"),
+        GraphQLTags("tags"),
         GraphQLStreamfield("freeformbody"),
     ]
 
