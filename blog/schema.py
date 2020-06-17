@@ -23,12 +23,17 @@ class TagType(graphene.ObjectType):
 
     tag_id = graphene.Int(name='id')
     name = graphene.String()
+    slug = graphene.String()
 
     def resolve_tag_id(self, _):  # noqa: D102
         return self.id
 
     def resolve_name(self, _):  # noqa: D102
         return self.name
+
+    def resolve_slug(self, _):  # noqa: D102
+        return self.slug
+
 
 
 class TagQuery(graphene.ObjectType):
