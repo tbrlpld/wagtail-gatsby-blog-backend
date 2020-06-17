@@ -91,6 +91,13 @@ class TagType(graphene.ObjectType):
         return self.name
 
 
+class TagQuery(graphene.ObjectType):
+    tag = graphene.Field(TagType, tag_id=graphene.Int())
+
+    def resolve_tag(self, info, tag_id):
+        return BlogPage.tags.get(pk=tag_id)
+
+
 def GraphQLTag(field_name: str, **kwargs):
     def Mixin():
         return GraphQLField(field_name, TagType, is_list=True, **kwargs)
