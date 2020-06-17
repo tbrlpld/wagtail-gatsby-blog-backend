@@ -170,8 +170,8 @@ BASE_URL = 'http://example.com'
 
 # Grapple settings
 GRAPHENE = {
-    'SCHEMA': 'grapple.schema.schema',
-    # 'SCHEMA': 'mysite.schema.schema',
+    # 'SCHEMA': 'grapple.schema.schema',
+    'SCHEMA': 'mysite.schema.schema',
 }
 GRAPPLE_APPS = {
     'home': '',

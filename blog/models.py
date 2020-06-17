@@ -70,23 +70,9 @@ class BlogPageTag(TaggedItemBase):
 from graphene_django.converter import convert_django_field
 import graphene
 
-
-class FlatTags(graphene.String):
-    @classmethod
-    def serialize(cls, value):
-        tagsList = []
-        for tag in value.all():
-            tagsList.append(tag.name)
-        return tagsList
-
-
 @convert_django_field.register(ClusterTaggableManager)
-def convert_tag_field_to_string(field, registry=None):
-    return graphene.Field(
-        FlatTags,
-        description=field.help_text,
-        required=not field.null,
-    )
+def convert_tag_manager_to_string(field, registry=None):
+    return graphene.String(description=field.help_text, required=not field.null)
 
 
 class BlogPage(Page):
@@ -134,6 +120,7 @@ class BlogPage(Page):
         GraphQLString("intro"),
         GraphQLString("body"),
         GraphQLString("tags"),
+        # GraphQLCollection("tags"),
         GraphQLStreamfield("freeformbody"),
     ]
 

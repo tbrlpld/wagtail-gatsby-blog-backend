@@ -8,7 +8,9 @@ GrappleSubscription = gs.schema._subscription
 GrappleMutation = gs.schema._mutation
 
 
-class Query(GrappleQuery):
+class Query(
+    GrappleQuery,
+):
     pass
 
 
