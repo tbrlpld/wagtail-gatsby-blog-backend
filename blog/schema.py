@@ -6,6 +6,7 @@ Custom GraphQL schema types that are not supported natively by Grapple.
 """
 
 import graphene
+from graphene.types.structures import Structure
 import graphene_django
 from graphene_django.converter import convert_django_field
 import grapple.models as gpm
@@ -18,17 +19,29 @@ class TagType(graphene_django.DjangoObjectType):
     class Meta:
         model = tgt.Tag
 
-    tagged_items = graphene.List("grapple.types.images.ImageObjectType")
+    # Importing the grapple types does not work, because they depend on the
+    # apps being registered.
+    # from grapple.types.images import ImageObjectType
+    # -> django.core.exceptions.AppRegistryNotReady: Models aren't loaded yet.
+
+    # graphene.Union fails. It can not work with the string identified types.
+
+    tagged_images = graphene.List("grapple.types.images.ImageObjectType")
+    # tagged_items = graphene.List("grapple.types.images.ImageObjectType")
     # tagged_items = graphene.Field(TaggedItemType)
 
-    def resolve_tagged_items(self, _):
+    def resolve_tagged_images(self, _):
+        from wagtail.images.models import Image
+
         tagged_items = self.taggit_taggeditem_items.all()
-        native_items = []
-        for tagged_item in tagged_items:
-            item_class = tagged_item.content_type.model_class()
-            native_item = item_class.objects.get(pk=tagged_item.pk)
-            native_items.append(native_item)
-        return native_items
+        image_pks = []
+        for ti in tagged_items:
+            ti_class = ti.content_type.model_class()
+            if ti_class == Image:
+                image_pks.append(ti.pk)
+
+        # TODO: filter image query set for the found image_pks.
+        return Image.objects.filter(pk__in=image_pks)
         # return self.taggit_taggeditem_items.first().content_type.model_class().objects.all()
 
 
