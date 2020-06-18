@@ -5,8 +5,8 @@ Custom GraphQL schema types that are not supported natively by Grapple.
 
 """
 
+import django.db.models as djm
 import graphene
-from graphene.types.structures import Structure
 import graphene_django
 from graphene_django.converter import convert_django_field
 import grapple.models as gpm
@@ -21,28 +21,61 @@ class TagType(graphene_django.DjangoObjectType):
 
     # Importing the grapple types does not work, because they depend on the
     # apps being registered.
-    # from grapple.types.images import ImageObjectType
+    # from grapple.types.images import ImageObjectType  # noqa: E800
     # -> django.core.exceptions.AppRegistryNotReady: Models aren't loaded yet.
 
     # graphene.Union fails. It can not work with the string identified types.
 
     tagged_images = graphene.List("grapple.types.images.ImageObjectType")
-    # tagged_items = graphene.List("grapple.types.images.ImageObjectType")
-    # tagged_items = graphene.Field(TaggedItemType)
+    tagged_documents = graphene.List("grapple.types.documents.DocumentObjectType")
+
+    @staticmethod
+    def convert_tagged_items_to_class_queryset(
+        tag: tgt.Tag,
+        target_class: djm.Model,
+    ):
+        """
+        Convert the items tagged by a Tag into a query set of a given class.
+
+        This conversion is only performed if the tagged items is actually of
+        the given type.
+
+        Parameters
+        ----------
+        tag_item: tgt.Tag
+            Tag for which the tagged items of a given class shall be extracted.
+        target_class: djm.Model
+            Django model that the items should be checked against.
+
+        Returns
+        -------
+        djm.query.QuerySet
+            QuerySet of the the `target_class` containing only the item tagged
+            with the given `tag`.
+
+        """
+
+        tagged_items = tag.taggit_taggeditem_items.all()
+        tagged_item_pks = []
+        for ti in tagged_items:
+            # Check if the tagged items class matches the target class
+            ti_class = ti.content_type.model_class()
+            if ti_class == target_class:
+                # Store object id of the item if its class matches the
+                # target class
+                tagged_item_pks.append(ti.object_id)
+
+        return target_class.objects.filter(pk__in=tagged_item_pks)
 
     def resolve_tagged_images(self, _):
-        from wagtail.images.models import Image
+        from wagtail.images.models import Image  # type: ignore
 
-        tagged_items = self.taggit_taggeditem_items.all()
-        image_pks = []
-        for ti in tagged_items:
-            ti_class = ti.content_type.model_class()
-            if ti_class == Image:
-                image_pks.append(ti.pk)
+        return TagType.convert_tagged_items_to_class_queryset(self, Image)
 
-        # TODO: filter image query set for the found image_pks.
-        return Image.objects.filter(pk__in=image_pks)
-        # return self.taggit_taggeditem_items.first().content_type.model_class().objects.all()
+    def resolve_tagged_documents(self, _):
+        from wagtail.documents.models import Document  # type: ignore
+
+        return TagType.convert_tagged_items_to_class_queryset(self, Document)
 
 
 class TagQuery(graphene.ObjectType):
