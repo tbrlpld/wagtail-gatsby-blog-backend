@@ -13,6 +13,8 @@ import grapple.models as gpm
 import modelcluster.contrib.taggit as mct
 import taggit.models as tgt
 
+from wagtail.documents.models import get_document_model
+from wagtail.images import get_image_model
 
 
 class TagType(graphene_django.DjangoObjectType):
@@ -30,9 +32,9 @@ class TagType(graphene_django.DjangoObjectType):
     tagged_documents = graphene.List("grapple.types.documents.DocumentObjectType")
 
     @staticmethod
-    def convert_tagged_items_to_class_queryset(
+    def convert_tagged_items_to_model_queryset(
         tag: tgt.Tag,
-        target_class: djm.Model,
+        target_model: djm.Model,
     ):
         """
         Convert the items tagged by a Tag into a query set of a given class.
@@ -44,7 +46,7 @@ class TagType(graphene_django.DjangoObjectType):
         ----------
         tag_item: tgt.Tag
             Tag for which the tagged items of a given class shall be extracted.
-        target_class: djm.Model
+        target_model: djm.Model
             Django model that the items should be checked against.
 
         Returns
@@ -60,22 +62,22 @@ class TagType(graphene_django.DjangoObjectType):
         for ti in tagged_items:
             # Check if the tagged items class matches the target class
             ti_class = ti.content_type.model_class()
-            if ti_class == target_class:
+            if ti_class == target_model:
                 # Store object id of the item if its class matches the
                 # target class
                 tagged_item_pks.append(ti.object_id)
 
-        return target_class.objects.filter(pk__in=tagged_item_pks)
+        return target_model.objects.filter(pk__in=tagged_item_pks)
 
     def resolve_tagged_images(self, _):
-        from wagtail.images.models import Image  # type: ignore
+        image_model = get_image_model()
 
-        return TagType.convert_tagged_items_to_class_queryset(self, Image)
+        return TagType.convert_tagged_items_to_model_queryset(self, image_model)
 
     def resolve_tagged_documents(self, _):
-        from wagtail.documents.models import Document  # type: ignore
+        document_model = get_document_model()
 
-        return TagType.convert_tagged_items_to_class_queryset(self, Document)
+        return TagType.convert_tagged_items_to_model_queryset(self, document_model)
 
 
 class TagQuery(graphene.ObjectType):

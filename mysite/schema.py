@@ -1,18 +1,14 @@
 import graphene
-
-from grapple import schema as gs
+from grapple. schema import schema as gs
 
 from blog.schema import TagQuery
 
-GrappleQuery = gs.schema._query
-GrappleSubscription = gs.schema._subscription
-GrappleMutation = gs.schema._mutation
+GrappleQuery = gs._query
+GrappleSubscription = gs._subscription
+GrappleMutation = gs._mutation
 
 
-class Query(
-    GrappleQuery,
-    TagQuery,
-):
+class Query(GrappleQuery, TagQuery):
     pass
 
 

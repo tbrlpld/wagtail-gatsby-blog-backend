@@ -13,10 +13,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
-from grapple.models import (
-    GraphQLString,
-    GraphQLStreamfield,
-)
+from grapple import models as gpm
 
 from blog.schema import GraphQLTags
 
@@ -95,13 +92,13 @@ class BlogPage(Page):
     ]
 
     graphql_fields = [
-        GraphQLString("title"),
-        GraphQLString("date"),
-        GraphQLString("author"),
-        GraphQLString("intro"),
-        GraphQLString("body"),
+        gpm.GraphQLString("title"),
+        gpm.GraphQLString("date"),
+        gpm.GraphQLString("author"),
+        gpm.GraphQLString("intro"),
+        gpm.GraphQLString("body"),
         GraphQLTags("tags"),
-        GraphQLStreamfield("freeformbody"),
+        gpm.GraphQLStreamfield("freeformbody"),
     ]
 
 
