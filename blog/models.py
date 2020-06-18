@@ -50,7 +50,7 @@ class BlogTagIndexPage(Page):
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
         'BlogPage',
-        related_name='tagged_items',
+        related_name='tag_connections',
         on_delete=models.CASCADE,
     )
 
@@ -107,7 +107,7 @@ class BlogPage(Page):
         GraphQLTags("tags"),
         gpm.GraphQLCollection(
             gpm.GraphQLForeignKey,
-            'tagged_items',
+            'tag_connections',
             content_type=BlogPageTag,
             is_queryset=True,
         ),
