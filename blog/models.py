@@ -14,6 +14,7 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
 from grapple import models as gpm
+from grapple import helpers as gph
 
 from blog.schema import GraphQLTags
 
@@ -45,12 +46,17 @@ class BlogTagIndexPage(Page):
         return context
 
 
+@gph.register_query_field('blogPageTag')
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
         'BlogPage',
         related_name='tagged_items',
         on_delete=models.CASCADE,
     )
+
+    graphql_fields = [
+        gpm.GraphQLForeignKey('content_object', 'blog.BlogPage'),
+    ]
 
 
 class BlogPage(Page):
@@ -98,6 +104,12 @@ class BlogPage(Page):
         gpm.GraphQLString("intro"),
         gpm.GraphQLString("body"),
         GraphQLTags("tags"),
+        gpm.GraphQLCollection(
+            gpm.GraphQLForeignKey,
+            'tagged_items',
+            content_type=BlogPageTag,
+            is_queryset=True,
+        ),
         gpm.GraphQLStreamfield("freeformbody"),
     ]
 
