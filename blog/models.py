@@ -16,7 +16,7 @@ from wagtail.search import index
 from grapple import models as gpm
 from grapple import helpers as gph
 
-from blog.schema import GraphQLTags
+from blog.schema import GraphQLTags, GraphQLTag
 
 
 class BlogIndexPage(Page):
@@ -56,6 +56,7 @@ class BlogPageTag(TaggedItemBase):
 
     graphql_fields = [
         gpm.GraphQLForeignKey('content_object', 'blog.BlogPage'),
+        GraphQLTag('tag'),
     ]
 
 
