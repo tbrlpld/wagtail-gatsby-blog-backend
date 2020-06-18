@@ -16,7 +16,7 @@ from wagtail.search import index
 from grapple import models as gpm
 from grapple import helpers as gph
 
-from blog.schema import GraphQLTags, GraphQLTag
+from tagging.schema import GraphQLTags, GraphQLTag
 
 
 class BlogIndexPage(Page):
