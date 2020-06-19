@@ -44,7 +44,7 @@ class BlogTagIndexPage(Page):
 
 
 class BlogPageTag(TaggedItemBase):
-    content_object = ParentalKey(
+    tagged_blog_page = ParentalKey(
         'BlogPage',
         related_name='tag_connections',
         on_delete=models.CASCADE,
