@@ -1,7 +1,7 @@
 import graphene
 from grapple. schema import schema as gs
 
-from tagging.schema import TaggingQueries
+from tagging.schema import Query as TaggingQuery
 from blog.schema import Query as BlogQuery
 
 GrappleQuery = gs._query
@@ -11,7 +11,7 @@ GrappleMutation = gs._mutation
 
 class Query(
     GrappleQuery,
-    TaggingQueries,
+    TaggingQuery,
     BlogQuery,
 ):
     pass

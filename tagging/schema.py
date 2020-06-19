@@ -8,9 +8,6 @@ Custom GraphQL schema types that are not supported natively by Grapple.
 import django.db.models as djm
 import graphene
 import graphene_django
-from graphene_django.converter import convert_django_field
-import grapple.models as gpm
-import modelcluster.contrib.taggit as mct
 import taggit.models as tgt
 
 from wagtail.documents.models import get_document_model
@@ -23,6 +20,8 @@ from wagtail.images import get_image_model
 # -> django.core.exceptions.AppRegistryNotReady: Models aren't loaded yet.
 
 # graphene.Union fails. It can not work with the string identified types.
+# Therefore, I can not return all tagged items in one type. The different
+# returned elements need to have their own tag type each.
 
 
 def convert_tagged_items_to_model_queryset(
@@ -92,7 +91,7 @@ class DocumentTagType(graphene_django.DjangoObjectType):
         return convert_tagged_items_to_model_queryset(self, document_model)
 
 
-class TaggingQueries(graphene.ObjectType):
+class Query(graphene.ObjectType):
     """Queries for the TagType."""
 
     tag = graphene.Field(TagType, id=graphene.ID())
@@ -133,9 +132,3 @@ class TaggingQueries(graphene.ObjectType):
         return tgt.Tag.objects.filter(
             taggit_taggeditem_items__content_type__model='document',
         )
-
-
-@convert_django_field.register(mct.ClusterTaggableManager)
-def convert_tag_manager_to_string(field, registry=None):
-    """Define converter type for ClusterTaggableManager."""
-    return TagType()
