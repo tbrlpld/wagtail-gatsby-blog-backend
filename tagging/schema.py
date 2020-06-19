@@ -17,8 +17,6 @@ Therefore, I can not return all tagged items in one type. The different
 returned elements need to have their own tag type each.
 
 """
-from django.db import models as djm  # type: ignore
-
 from wagtail.documents.models import get_document_model   # type: ignore
 from wagtail.images import get_image_model   # type: ignore
 
