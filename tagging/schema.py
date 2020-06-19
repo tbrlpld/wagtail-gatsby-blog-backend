@@ -69,12 +69,6 @@ class Query(graphene.ObjectType):
     )
     tags = graphene.List(TagType)
 
-    image_tag = graphene.Field(ImageTagType, id=graphene.ID())
-    image_tags = graphene.List(ImageTagType)
-
-    document_tag = graphene.Field(DocumentTagType, id=graphene.ID())
-    document_tags = graphene.List(DocumentTagType)
-
     def resolve_tag(self, _, id_=None, name=None):
         if id_ is not None:
             return tgm.Tag.objects.get(pk=id_)
@@ -85,17 +79,32 @@ class Query(graphene.ObjectType):
     def resolve_tags(self, _):  # noqa: D102
         return tgm.Tag.objects.all().order_by('pk')
 
+    image_tag = graphene.Field(
+        ImageTagType,
+        id_=graphene.ID(name='id'),
+        name=graphene.String(),
+    )
+    image_tags = graphene.List(ImageTagType)
+
     @staticmethod
     def get_image_tags():
         return tgm.Tag.objects.filter(
             taggit_taggeditem_items__content_type__model='image',
         )
 
-    def resolve_image_tag(self, _, id):
-        return Query.get_image_tags().get(pk=id)
+    def resolve_image_tag(self, _, id_=None, name=None):
+        image_tags = Query.get_image_tags()
+        if id_ is not None:
+            return image_tags.get(pk=id_)
+        if name is not None:
+            return image_tags.get(name=name)
+        return None
 
     def resolve_image_tags(self, _):
         return Query.get_image_tags()
+
+    document_tag = graphene.Field(DocumentTagType, id=graphene.ID())
+    document_tags = graphene.List(DocumentTagType)
 
     @staticmethod
     def get_document_tags():
