@@ -100,6 +100,8 @@ class BlogPage(Page):
             'tagging.schema.TagType',
             is_list=True,
         ),
+        # The next field is needed so that the connection from
+        # BlogPageTag to the BlogPage can be found.
         gpm.GraphQLField(
             'tag_connections',
             'blog.schema.BlogPageTagConnection',
