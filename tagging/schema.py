@@ -31,12 +31,14 @@ import graphene_django  # type: ignore
 class TagType(graphene_django.DjangoObjectType):
     class Meta:
         model = tgm.Tag
+        description="Type for a general taggit.Tag"
 
 
 class ImageTagType(graphene_django.DjangoObjectType):
     class Meta:
         model = tgm.Tag
         exclude = ('blog_blogpagetag_items',)
+        description="Tag used on images."
 
     tagged_images = graphene.List("grapple.types.images.ImageObjectType")
 
@@ -50,6 +52,7 @@ class DocumentTagType(graphene_django.DjangoObjectType):
     class Meta:
         model = tgm.Tag
         exclude = ('blog_blogpagetag_items',)
+        description="Tag used on documents."
 
     tagged_documents = graphene.List("grapple.types.documents.DocumentObjectType")
 
@@ -61,7 +64,11 @@ class DocumentTagType(graphene_django.DjangoObjectType):
 class Query(graphene.ObjectType):
     """Queries for the TagType."""
 
-    tag = graphene.Field(TagType, id=graphene.ID())
+    tag = graphene.Field(
+        TagType,
+        id_=graphene.ID(name='id'),
+        name=graphene.String(),
+    )
     tags = graphene.List(TagType)
 
     image_tag = graphene.Field(ImageTagType, id=graphene.ID())
@@ -70,32 +77,36 @@ class Query(graphene.ObjectType):
     document_tag = graphene.Field(DocumentTagType, id=graphene.ID())
     document_tags = graphene.List(DocumentTagType)
 
-    def resolve_tag(self, _, id):
-        return tgm.Tag.objects.get(pk=id)
+    def resolve_tag(self, _, id_=None, name=None):
+        if id_ is not None:
+            return tgm.Tag.objects.get(pk=id_)
+        if name is not None:
+            return tgm.Tag.objects.get(name=name)
+        return None
 
     def resolve_tags(self, _):  # noqa: D102
         return tgm.Tag.objects.all().order_by('pk')
 
-    def resolve_image_tag(self, _, id):
+    @staticmethod
+    def get_image_tags():
         return tgm.Tag.objects.filter(
             taggit_taggeditem_items__content_type__model='image',
-        ).get(
-            pk=id,
         )
 
+    def resolve_image_tag(self, _, id):
+        return Query.get_image_tags().get(pk=id)
+
     def resolve_image_tags(self, _):
+        return Query.get_image_tags()
+
+    @staticmethod
+    def get_document_tags():
         return tgm.Tag.objects.filter(
-            taggit_taggeditem_items__content_type__model='image',
+            taggit_taggeditem_items__content_type__model='document',
         )
 
     def resolve_document_tag(self, _, id):
-        return tgm.Tag.objects.filter(
-            taggit_taggeditem_items__content_type__model='document',
-        ).get(
-            pk=id,
-        )
+        return Query.get_document_tags().get(pk=id)
 
     def resolve_document_tags(self, _):
-        return tgm.Tag.objects.filter(
-            taggit_taggeditem_items__content_type__model='document',
-        )
+        return Query.get_document_tags()
