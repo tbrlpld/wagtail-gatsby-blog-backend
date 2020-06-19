@@ -98,7 +98,7 @@ class BlogPage(Page):
         gpm.GraphQLString("intro"),
         gpm.GraphQLString("body"),
         GraphQLTags("tags"),
-        gpm.GraphQLField('tag_connections', 'blog.schema.BlogPageTagType', is_list=True),
+        gpm.GraphQLField('tag_connections', 'blog.schema.BlogPageTagConnection', is_list=True),
         gpm.GraphQLStreamfield("freeformbody"),
     ]
 
