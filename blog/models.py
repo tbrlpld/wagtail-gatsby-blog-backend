@@ -15,8 +15,6 @@ from wagtail.search import index
 
 from grapple import models as gpm
 
-from tagging.schema import GraphQLTags
-
 
 class BlogIndexPage(Page):
     intro = RichTextField(blank=True)
@@ -97,8 +95,16 @@ class BlogPage(Page):
         gpm.GraphQLString("author"),
         gpm.GraphQLString("intro"),
         gpm.GraphQLString("body"),
-        GraphQLTags("tags"),
-        gpm.GraphQLField('tag_connections', 'blog.schema.BlogPageTagConnection', is_list=True),
+        gpm.GraphQLField(
+            'tags',
+            'tagging.schema.TagType',
+            is_list=True,
+        ),
+        gpm.GraphQLField(
+            'tag_connections',
+            'blog.schema.BlogPageTagConnection',
+            is_list=True,
+        ),
         gpm.GraphQLStreamfield("freeformbody"),
     ]
 

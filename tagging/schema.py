@@ -139,19 +139,3 @@ class TaggingQueries(graphene.ObjectType):
 def convert_tag_manager_to_string(field, registry=None):
     """Define converter type for ClusterTaggableManager."""
     return TagType()
-
-
-def GraphQLTag(field_name: str, **kwargs):  # noqa: N802
-    """Custom grapple wrapper function for the TagType."""
-    def Mixin():
-        return gpm.GraphQLField(field_name, TagType, is_list=False, **kwargs)
-
-    return Mixin
-
-
-def GraphQLTags(field_name: str, **kwargs):  # noqa: N802
-    """Custom grapple wrapper function for the TagType."""
-    def Mixin():
-        return gpm.GraphQLField(field_name, TagType, is_list=True, **kwargs)
-
-    return Mixin
