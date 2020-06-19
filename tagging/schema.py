@@ -28,43 +28,6 @@ import graphene  # type: ignore
 import graphene_django  # type: ignore
 
 
-def convert_tagged_items_to_model_queryset(
-    tag: tgm.Tag,
-    target_model: djm.Model,
-):
-    """
-    Convert the items tagged by a Tag into a query set of a given class.
-
-    This conversion is only performed if the tagged items is actually of
-    the given type.
-
-    Parameters
-    ----------
-    tag_item: tgt.Tag
-        Tag for which the tagged items of a given class shall be extracted.
-    target_model: djm.Model
-        Django model that the items should be checked against.
-
-    Returns
-    -------
-    djm.query.QuerySet
-        QuerySet of the the `target_class` containing only the item tagged
-        with the given `tag`.
-
-    """
-    tagged_items = tag.taggit_taggeditem_items.all()
-    tagged_item_pks = []
-    for ti in tagged_items:
-        # Check if the tagged items class matches the target class
-        ti_class = ti.content_type.model_class()
-        if ti_class == target_model:
-            # Store object id of the item if its class matches the
-            # target class
-            tagged_item_pks.append(ti.object_id)
-
-    return target_model.objects.filter(pk__in=tagged_item_pks)
-
-
 class TagType(graphene_django.DjangoObjectType):
     class Meta:
         model = tgm.Tag
@@ -73,26 +36,27 @@ class TagType(graphene_django.DjangoObjectType):
 class ImageTagType(graphene_django.DjangoObjectType):
     class Meta:
         model = tgm.Tag
+        exclude = ('blog_blogpagetag_items',)
 
     tagged_images = graphene.List("grapple.types.images.ImageObjectType")
 
     def resolve_tagged_images(self, _):
         image_model = get_image_model()
 
-        return convert_tagged_items_to_model_queryset(self, image_model)
+        return image_model.objects.filter(tags__id=self.id)
 
 
 class DocumentTagType(graphene_django.DjangoObjectType):
     class Meta:
         model = tgm.Tag
+        exclude = ('blog_blogpagetag_items',)
 
     tagged_documents = graphene.List("grapple.types.documents.DocumentObjectType")
 
     def resolve_tagged_documents(self, _):
         document_model = get_document_model()
 
-        return convert_tagged_items_to_model_queryset(self, document_model)
-
+        return document_model.objects.filter(tags__id=self.id)
 
 class Query(graphene.ObjectType):
     """Queries for the TagType."""
