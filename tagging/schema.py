@@ -98,6 +98,17 @@ class Query(graphene.ObjectType):
             taggit_taggeditem_items__content_type__model='image',
         )
 
+    @staticmethod
+    def get_tags_of_model_instance(model, primary_key=None, title=None):
+        if primary_key is not None:
+            return model.objects.get(pk=primary_key).tags.all()
+        if title is not None:
+            return model.objects.get(title=title).tags.all()
+        raise graphql.GraphQLError(
+            'Id or title of the {0}'.format(model.__name__.lower())
+            + ' needs to be defined to return its tags.',
+        )
+
     def resolve_image_tag(self, _, id_=None, name=None):
         image_tags = Query.get_image_tags()
         if id_ is not None:
@@ -110,17 +121,20 @@ class Query(graphene.ObjectType):
         return Query.get_image_tags()
 
     def resolve_tags_of_image(self, _, image_id=None, image_title=None):
-        Image = get_image_model()
-        if image_id is not None:
-            return Image.objects.get(pk=image_id).tags.all()
-        if image_title is not None:
-            return Image.objects.get(title=image_title).tags.all()
-        raise graphql.GraphQLError(
-            'Id or title of image needs to be defined to returns its tags.'
+        return Query.get_tags_of_model_instance(
+            get_image_model(),
+            primary_key=image_id,
+            title=image_title,
         )
 
     document_tag = graphene.Field(DocumentTagType, id=graphene.ID())
     document_tags = graphene.List(DocumentTagType)
+    tags_of_document = graphene.List(
+        DocumentTagType,
+        document_id=graphene.ID(),
+        document_title=graphene.String(),
+    )
+
 
     @staticmethod
     def get_document_tags():
@@ -133,3 +147,11 @@ class Query(graphene.ObjectType):
 
     def resolve_document_tags(self, _):
         return Query.get_document_tags()
+
+    def resolve_tags_of_document(self, _, document_id=None, document_title=None):
+        return Query.get_tags_of_model_instance(
+            get_document_model(),
+            primary_key=document_id,
+            title=document_title,
+        )
+
