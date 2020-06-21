@@ -86,6 +86,10 @@ class Query(graphene.ObjectType):
     )
     image_tags = graphene.List(ImageTagType)
 
+    for_image_get_tags = graphene.List(ImageTagType)
+
+
+
     @staticmethod
     def get_image_tags():
         return tgm.Tag.objects.filter(
@@ -102,6 +106,10 @@ class Query(graphene.ObjectType):
 
     def resolve_image_tags(self, _):
         return Query.get_image_tags()
+
+    def resolve_for_image_get_tags(self, _):
+        image = get_image_model().objects.first()
+        return image.tags.all()
 
     document_tag = graphene.Field(DocumentTagType, id=graphene.ID())
     document_tags = graphene.List(DocumentTagType)
