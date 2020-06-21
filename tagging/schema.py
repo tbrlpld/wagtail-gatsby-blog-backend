@@ -22,6 +22,7 @@ from wagtail.images import get_image_model   # type: ignore
 
 from taggit import models as tgm   # type: ignore
 
+import graphql
 import graphene  # type: ignore
 import graphene_django  # type: ignore
 
@@ -85,10 +86,10 @@ class Query(graphene.ObjectType):
         name=graphene.String(),
     )
     image_tags = graphene.List(ImageTagType)
-
     tags_of_image = graphene.List(
         ImageTagType,
-        image_id=graphene.ID(required=True),
+        image_id=graphene.ID(),
+        image_title=graphene.String(),
     )
 
     @staticmethod
@@ -108,10 +109,15 @@ class Query(graphene.ObjectType):
     def resolve_image_tags(self, _):
         return Query.get_image_tags()
 
-    def resolve_tags_of_image(self, _, image_id):
+    def resolve_tags_of_image(self, _, image_id=None, image_title=None):
         Image = get_image_model()
-        image = Image.objects.get(pk=image_id)
-        return image.tags.all()
+        if image_id is not None:
+            return Image.objects.get(pk=image_id).tags.all()
+        if image_title is not None:
+            return Image.objects.get(title=image_title).tags.all()
+        raise graphql.GraphQLError(
+            'Id or title of image needs to be defined to returns its tags.'
+        )
 
     document_tag = graphene.Field(DocumentTagType, id=graphene.ID())
     document_tags = graphene.List(DocumentTagType)
