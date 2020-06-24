@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models as djm
 
 # Create your models here.
 from modelcluster.fields import ParentalKey
@@ -12,8 +12,32 @@ from wagtail.core import blocks
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
+from wagtail.snippets import models as wtsnip
 
 from grapple import models as gpm
+
+
+@wtsnip.register_snippet
+class BlogCategory(djm.Model):
+    name = djm.CharField(max_length=255)
+    icom = djm.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=djm.SET_NULL,
+        related_name='+',
+    )
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('icon'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'blog categories'
 
 
 class BlogIndexPage(Page):
@@ -61,7 +85,7 @@ class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
         'BlogPage',
         related_name='tag_connections',
-        on_delete=models.CASCADE,
+        on_delete=djm.CASCADE,
     )
 
 
@@ -71,9 +95,9 @@ class BlogPage(Page):
     ]
     subpage_types = []
 
-    author = models.CharField(max_length=250, blank=True)
-    date = models.DateField('Post date')
-    intro = models.CharField(max_length=250)
+    author = djm.CharField(max_length=250, blank=True)
+    date = djm.DateField('Post date')
+    intro = djm.CharField(max_length=250)
     body = RichTextField(blank=True)
     freeformbody = StreamField(
         [
@@ -134,18 +158,18 @@ class BlogPageGalleryImage(Orderable):
     # Associate with blog page.
     page = ParentalKey(
         BlogPage,
-        on_delete=models.CASCADE,
+        on_delete=djm.CASCADE,
         related_name='gallery_images',
     )
 
     # Relation to image storage
-    image = models.ForeignKey(
+    image = djm.ForeignKey(
         'wagtailimages.Image',
-        on_delete=models.CASCADE,
+        on_delete=djm.CASCADE,
         related_name='+',
     )
 
-    caption = models.CharField(
+    caption = djm.CharField(
         blank=True,
         max_length=250,
     )
