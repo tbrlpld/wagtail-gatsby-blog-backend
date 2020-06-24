@@ -1,8 +1,7 @@
-from django import forms as djf
 from django.db import models as djm
 
 # Create your models here.
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
@@ -112,7 +111,6 @@ class BlogPage(Page):
         through=BlogPageTag,
         blank=True,
     )
-    categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
 
     search_fields = Page.search_fields + [
         index.SearchField('intro'),
@@ -125,7 +123,6 @@ class BlogPage(Page):
                 FieldPanel('author'),
                 FieldPanel('date'),
                 FieldPanel('tags'),
-                FieldPanel('categories', widget=djf.CheckboxSelectMultiple),
             ],
             heading='Blog Post Information',
         ),
