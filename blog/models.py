@@ -14,11 +14,9 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 from wagtail.snippets import models as wtsnip
 
-from grapple import helpers as gph
 from grapple import models as gpm
 
 
-@gph.register_query_field('category', 'categories')
 @wtsnip.register_snippet
 class BlogCategory(djm.Model):
     name = djm.CharField(max_length=255)
@@ -34,11 +32,6 @@ class BlogCategory(djm.Model):
         FieldPanel('name'),
         ImageChooserPanel('icon'),
     ]
-
-    graphql_fields = [
-        gpm.GraphQLString('name'),
-    ]
-
 
     def __str__(self):
         return self.name
@@ -96,7 +89,6 @@ class BlogPageTag(TaggedItemBase):
     )
 
 
-@gph.register_query_field('blogpage')
 class BlogPage(Page):
     parent_page_types = [
         BlogIndexPage,
@@ -154,7 +146,6 @@ class BlogPage(Page):
         gpm.GraphQLString("author"),
         gpm.GraphQLString("intro"),
         gpm.GraphQLString("body"),
-        gpm.GraphQLStreamfield("freeformbody"),
         gpm.GraphQLField(
             'tags',
             'tagging.schema.TagType',
@@ -167,7 +158,7 @@ class BlogPage(Page):
             'blog.schema.BlogPageTagConnection',
             is_list=True,
         ),
-        gpm.GraphQLSnippet('category', 'blog.BlogCategory'),
+        gpm.GraphQLStreamfield("freeformbody"),
     ]
 
 
