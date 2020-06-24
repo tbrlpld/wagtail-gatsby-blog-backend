@@ -124,7 +124,7 @@ class BlogPage(Page):
         null=True,
         blank=True,
         on_delete=djm.SET_NULL,
-        related_name='blogpages',
+        related_name='+',
     )
 
     search_fields = Page.search_fields + [
