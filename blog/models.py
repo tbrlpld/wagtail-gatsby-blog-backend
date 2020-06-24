@@ -17,6 +17,13 @@ from grapple import models as gpm
 
 
 class BlogIndexPage(Page):
+    parent_page_types = [
+        "home.HomePage",
+    ]
+    subpage_types = [
+        "blog.BlogPage",
+    ]
+
     intro = RichTextField(blank=True)
 
     content_panels = Page.content_panels + [
@@ -33,6 +40,13 @@ class BlogIndexPage(Page):
 
 
 class BlogTagIndexPage(Page):
+    parent_page_types = [
+        "home.HomePage",
+    ]
+    subpage_types = [
+        "blog.BlogPage",
+    ]
+
     def get_context(self, request):
         context = super().get_context(request)
 
@@ -52,6 +66,11 @@ class BlogPageTag(TaggedItemBase):
 
 
 class BlogPage(Page):
+    parent_page_types = [
+        BlogIndexPage,
+    ]
+    subpage_types = []
+
     author = models.CharField(max_length=250, blank=True)
     date = models.DateField('Post date')
     intro = models.CharField(max_length=250)
