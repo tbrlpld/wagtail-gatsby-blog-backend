@@ -13,6 +13,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
+from grapple import helpers as gph
 from grapple import models as gpm
 
 
@@ -79,6 +80,7 @@ class BlogPageTag(TaggedItemBase):
     )
 
 
+@gph.register_query_field('BlogPage')
 class BlogPage(Page):
     parent_page_types = [
         BlogIndexPage,
@@ -101,6 +103,13 @@ class BlogPage(Page):
         through=BlogPageTag,
         blank=True,
     )
+    category = models.ForeignKey(
+        "blog.BlogCategory",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="blogpages",
+    )
 
     search_fields = Page.search_fields + [
         index.SearchField('intro'),
@@ -113,6 +122,7 @@ class BlogPage(Page):
                 FieldPanel('author'),
                 FieldPanel('date'),
                 FieldPanel('tags'),
+                FieldPanel('category'),
             ],
             heading='Blog Post Information',
         ),
