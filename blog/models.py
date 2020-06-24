@@ -74,6 +74,28 @@ class BlogIndexPage(Page):
         return context
 
 
+class BlogCategoryIndexPage(Page):
+    parent_page_types = [
+        "home.HomePage",
+    ]
+    # This page will show a list of pages, but not really have any child pages.
+    subpage_types = []
+
+    intro = RichTextField(blank=True)
+    category = djm.ForeignKey(
+        'blog.BlogCategory',
+        null=True,
+        blank=False,
+        on_delete=djm.SET_NULL,
+        related_name='+',
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname='full'),
+        FieldPanel('category'),
+    ]
+
+
 class BlogTagIndexPage(Page):
     parent_page_types = [
         "home.HomePage",
