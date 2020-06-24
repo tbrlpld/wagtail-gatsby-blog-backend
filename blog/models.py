@@ -37,8 +37,12 @@ class BlogCategory(djm.Model):
 
     graphql_fields = [
         gpm.GraphQLString('name'),
+        gpm.GraphQLCollection(
+            gpm.GraphQLForeignKey,
+            'blogpages',
+            'blog.BlogPage',
+        )
     ]
-
 
     def __str__(self):
         return self.name
