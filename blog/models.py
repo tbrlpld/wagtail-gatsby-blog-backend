@@ -20,7 +20,7 @@ from grapple import models as gpm
 @wtsnip.register_snippet
 class BlogCategory(djm.Model):
     name = djm.CharField(max_length=255)
-    icon = djm.ForeignKey(
+    icom = djm.ForeignKey(
         'wagtailimages.Image',
         null=True,
         blank=True,
