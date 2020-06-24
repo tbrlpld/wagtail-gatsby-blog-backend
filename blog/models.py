@@ -39,6 +39,20 @@ class BlogIndexPage(Page):
         return context
 
 
+class BlogCategory(Page):
+    parent_page_types = [
+        "home.HomePage",
+    ]
+    subpage_types = [
+    ]
+
+    intro = RichTextField(blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname='full'),
+    ]
+
+
 class BlogTagIndexPage(Page):
     parent_page_types = [
         "home.HomePage",
