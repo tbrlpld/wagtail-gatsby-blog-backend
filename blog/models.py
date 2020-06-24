@@ -74,7 +74,6 @@ class BlogIndexPage(Page):
         return context
 
 
-@gph.register_query_field('BlogCategoryIndexPage')
 class BlogCategoryIndexPage(Page):
     parent_page_types = [
         "home.HomePage",
@@ -94,11 +93,6 @@ class BlogCategoryIndexPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname='full'),
         FieldPanel('category'),
-    ]
-
-    graphql_fields = [
-        gpm.GraphQLString('intro'),
-        gpm.GraphQLSnippet('category', 'blog.BlogCategory'),
     ]
 
 
