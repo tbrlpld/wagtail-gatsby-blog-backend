@@ -53,6 +53,19 @@ class BlogCategory(Page):
         FieldPanel('intro', classname='full'),
     ]
 
+    def get_url_parts(self, request=None):
+        site_id, site_root, page_url_raltive_to_site_root = super(
+            ).get_url_parts(request)
+        # URL typically has leading and trailing slashes. When splitting, an
+        # element with empty string remains in the list in the beginning and
+        # end. This is useful for joining again (after the alteration).
+        urllist = page_url_raltive_to_site_root.split("/")
+        # Inserting 'category' after the empty string, before the first
+        # real element.
+        urllist.insert(1, 'categories')
+        page_url_raltive_to_site_root = "/".join(urllist)
+        return (site_id, site_root, page_url_raltive_to_site_root)
+
 
 class BlogTagIndexPage(Page):
     parent_page_types = [
