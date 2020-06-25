@@ -189,6 +189,11 @@ class BlogPage(Page):
             'category',
             'blog.BlogCategory',
         ),
+        gpm.GraphQLField(
+            'gallery_images',
+            'blog.schema.BlogPageGalleryImageType',
+            is_list=True,
+        ),
     ]
 
 
