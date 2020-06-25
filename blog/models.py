@@ -13,6 +13,8 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 
+import graphene
+
 from grapple import helpers as gph
 from grapple import models as gpm
 
@@ -40,6 +42,11 @@ class BlogIndexPage(Page):
         return context
 
 
+@gph.register_query_field('blogCategory', 'blogCategories', {
+    "id": graphene.ID(),
+    "url": graphene.String(),
+    "slug": graphene.String(),
+})
 class BlogCategory(Page):
     parent_page_types = [
         "home.HomePage",
@@ -51,6 +58,16 @@ class BlogCategory(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname='full'),
+    ]
+
+    graphql_fields = [
+        gpm.GraphQLString('title'),
+        gpm.GraphQLString('intro'),
+        gpm.GraphQLCollection(
+            gpm.GraphQLForeignKey,
+            'blogpages',
+            'blog.BlogPage',
+        ),
     ]
 
     def get_url_parts(self, request=None):
@@ -93,7 +110,11 @@ class BlogPageTag(TaggedItemBase):
     )
 
 
-@gph.register_query_field('BlogPage')
+@gph.register_query_field('blogPage', 'blogPages', {
+    "id": graphene.ID(),
+    "url": graphene.String(),
+    "slug": graphene.String(),
+})
 class BlogPage(Page):
     parent_page_types = [
         BlogIndexPage,
@@ -151,6 +172,7 @@ class BlogPage(Page):
         gpm.GraphQLString("author"),
         gpm.GraphQLString("intro"),
         gpm.GraphQLString("body"),
+        gpm.GraphQLStreamfield("freeformbody"),
         gpm.GraphQLField(
             'tags',
             'tagging.schema.TagType',
@@ -163,7 +185,10 @@ class BlogPage(Page):
             'blog.schema.BlogPageTagConnection',
             is_list=True,
         ),
-        gpm.GraphQLStreamfield("freeformbody"),
+        gpm.GraphQLForeignKey(
+            'category',
+            'blog.BlogCategory',
+        ),
     ]
 
 
