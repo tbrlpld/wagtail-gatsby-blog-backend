@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'grapple',
     'graphene_django',
     'channels',
+    'wagtail_headless_preview',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -178,4 +179,19 @@ GRAPPLE_APPS = {
     'home': '',
     'blog': '',
 }
-GRAPPLE_ADD_SEARCH_HIT=False
+GRAPPLE_ADD_SEARCH_HIT =False
+
+# Headless preview
+HEADLESS_PREVIEW_CLIENT_URLS = {
+    "default": "http://localhost:8001/preview",
+}
+HEADLESS_PREVIEW_LIVE = False
+
+ASGI_APPLICATION = "asgi.channel_layer"
+CHANNELS_WS_PROTOCOLS = ["graphql-ws"]
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgiref.inmemory.ChannelLayer",
+        "ROUTING": "grapple.urls.channel_routing",
+    },
+}

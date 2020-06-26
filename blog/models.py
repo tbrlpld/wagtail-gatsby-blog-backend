@@ -18,6 +18,8 @@ import graphene
 from grapple import helpers as gph
 from grapple import models as gpm
 
+from wagtail_headless_preview import models as wthpm
+
 
 class BlogIndexPage(Page):
     parent_page_types = [
@@ -115,7 +117,7 @@ class BlogPageTag(TaggedItemBase):
     "url": graphene.String(),
     "slug": graphene.String(),
 })
-class BlogPage(Page):
+class BlogPage(wthpm.HeadlessPreviewMixin, Page):
     parent_page_types = [
         BlogIndexPage,
     ]
