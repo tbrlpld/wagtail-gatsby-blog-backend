@@ -1,23 +1,23 @@
+# First-Party Imports
 from django.db import models
-
-# Create your models here.
-from modelcluster.fields import ParentalKey
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import TaggedItemBase
-
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
-from wagtail.core.models import Page, Orderable
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core import blocks
-from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.images.blocks import ImageChooserBlock
-from wagtail.search import index
-
 import graphene
-
 from grapple import helpers as gph
 from grapple import models as gpm
-
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
+from taggit.models import TaggedItemBase
+from wagtail.admin.edit_handlers import (
+    FieldPanel,
+    InlinePanel,
+    MultiFieldPanel,
+    StreamFieldPanel,
+)
+from wagtail.core import blocks
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.models import Orderable, Page
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.search import index
 from wagtail_headless_preview import models as wthpm
 
 
@@ -74,7 +74,7 @@ class BlogCategory(Page):
 
     def get_url_parts(self, request=None):
         site_id, site_root, page_url_raltive_to_site_root = super(
-            ).get_url_parts(request)
+        ).get_url_parts(request)
         # URL typically has leading and trailing slashes. When splitting, an
         # element with empty string remains in the list in the beginning and
         # end. This is useful for joining again (after the alteration).
