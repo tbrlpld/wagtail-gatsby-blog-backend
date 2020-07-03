@@ -23,10 +23,10 @@ from wagtail_headless_preview import models as wthpm
 
 class BlogIndexPage(Page):
     parent_page_types = [
-        "home.HomePage",
+        'home.HomePage',
     ]
     subpage_types = [
-        "blog.BlogPage",
+        'blog.BlogPage',
     ]
 
     intro = RichTextField(blank=True)
@@ -45,13 +45,13 @@ class BlogIndexPage(Page):
 
 
 @gph.register_query_field('blogCategory', 'blogCategories', {
-    "id": graphene.ID(),
-    "url": graphene.String(),
-    "slug": graphene.String(),
+    'id': graphene.ID(),
+    'url': graphene.String(),
+    'slug': graphene.String(),
 })
 class BlogCategory(Page):
     parent_page_types = [
-        "home.HomePage",
+        'home.HomePage',
     ]
     subpage_types = [
     ]
@@ -78,20 +78,20 @@ class BlogCategory(Page):
         # URL typically has leading and trailing slashes. When splitting, an
         # element with empty string remains in the list in the beginning and
         # end. This is useful for joining again (after the alteration).
-        urllist = page_url_raltive_to_site_root.split("/")
+        urllist = page_url_raltive_to_site_root.split('/')
         # Inserting 'category' after the empty string, before the first
         # real element.
         urllist.insert(1, 'categories')
-        page_url_raltive_to_site_root = "/".join(urllist)
+        page_url_raltive_to_site_root = '/'.join(urllist)
         return (site_id, site_root, page_url_raltive_to_site_root)
 
 
 class BlogTagIndexPage(Page):
     parent_page_types = [
-        "home.HomePage",
+        'home.HomePage',
     ]
     subpage_types = [
-        "blog.BlogPage",
+        'blog.BlogPage',
     ]
 
     def get_context(self, request):
@@ -113,9 +113,9 @@ class BlogPageTag(TaggedItemBase):
 
 
 @gph.register_query_field('blogPage', 'blogPages', {
-    "id": graphene.ID(),
-    "url": graphene.String(),
-    "slug": graphene.String(),
+    'id': graphene.ID(),
+    'url': graphene.String(),
+    'slug': graphene.String(),
 })
 class BlogPage(wthpm.HeadlessPreviewMixin, Page):
     parent_page_types = [
@@ -129,9 +129,9 @@ class BlogPage(wthpm.HeadlessPreviewMixin, Page):
     body = RichTextField(blank=True)
     freeformbody = StreamField(
         [
-            ("heading", blocks.CharBlock(classname="full title")),
-            ("paragraph", blocks.RichTextBlock()),
-            ("image", ImageChooserBlock()),
+            ('heading', blocks.CharBlock(classname='full title')),
+            ('paragraph', blocks.RichTextBlock()),
+            ('image', ImageChooserBlock()),
         ],
         blank=True,
     )
@@ -140,11 +140,11 @@ class BlogPage(wthpm.HeadlessPreviewMixin, Page):
         blank=True,
     )
     category = models.ForeignKey(
-        "blog.BlogCategory",
+        'blog.BlogCategory',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="blogpages",
+        related_name='blogpages',
     )
 
     search_fields = Page.search_fields + [
@@ -163,18 +163,18 @@ class BlogPage(wthpm.HeadlessPreviewMixin, Page):
             heading='Blog Post Information',
         ),
         FieldPanel('intro'),
-        FieldPanel('body', classname="full"),
+        FieldPanel('body', classname='full'),
         StreamFieldPanel('freeformbody'),
         InlinePanel('gallery_images', label='Gallery Images'),
     ]
 
     graphql_fields = [
-        gpm.GraphQLString("title"),
-        gpm.GraphQLString("date"),
-        gpm.GraphQLString("author"),
-        gpm.GraphQLString("intro"),
-        gpm.GraphQLString("body"),
-        gpm.GraphQLStreamfield("freeformbody"),
+        gpm.GraphQLString('title'),
+        gpm.GraphQLString('date'),
+        gpm.GraphQLString('author'),
+        gpm.GraphQLString('intro'),
+        gpm.GraphQLString('body'),
+        gpm.GraphQLStreamfield('freeformbody'),
         gpm.GraphQLField(
             'tags',
             'tagging.schema.TagType',
