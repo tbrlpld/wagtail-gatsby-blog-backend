@@ -1,4 +1,4 @@
-# First-Party Imports
+# Third-Party Imports
 from django.db import models
 import graphene
 from grapple import helpers as gph
