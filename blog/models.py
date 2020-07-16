@@ -1,4 +1,5 @@
 # Third-Party Imports
+# First-Party Imports
 from django.db import models
 import graphene
 from grapple import helpers as gph
@@ -18,7 +19,8 @@ from wagtail.core.models import Orderable, Page
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-from wagtail_headless_preview import models as wthpm
+
+# from wagtail_headless_preview import models as wthpm
 
 
 class BlogIndexPage(Page):
@@ -117,7 +119,7 @@ class BlogPageTag(TaggedItemBase):
     'url': graphene.String(),
     'slug': graphene.String(),
 })
-class BlogPage(wthpm.HeadlessPreviewMixin, Page):
+class BlogPage(Page):
     parent_page_types = [
         BlogIndexPage,
     ]

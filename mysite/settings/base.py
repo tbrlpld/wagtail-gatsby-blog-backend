@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+# Standard Library Imports
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -46,8 +47,8 @@ INSTALLED_APPS = [
 
     'grapple',
     'graphene_django',
-    'channels',
-    'wagtail_headless_preview',
+    # 'channels',
+    # 'wagtail_headless_preview',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -179,19 +180,19 @@ GRAPPLE_APPS = {
     'home': '',
     'blog': '',
 }
-GRAPPLE_ADD_SEARCH_HIT =False
+GRAPPLE_ADD_SEARCH_HIT = False
 
 # Headless preview
-HEADLESS_PREVIEW_CLIENT_URLS = {
-    "default": "http://localhost:8001/preview",
-}
-HEADLESS_PREVIEW_LIVE = False
+# HEADLESS_PREVIEW_CLIENT_URLS = {
+#     "default": "http://localhost:8001/preview",
+# }
+# HEADLESS_PREVIEW_LIVE = False
 
-ASGI_APPLICATION = "asgi.channel_layer"
-CHANNELS_WS_PROTOCOLS = ["graphql-ws"]
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgiref.inmemory.ChannelLayer",
-        "ROUTING": "grapple.urls.channel_routing",
-    },
-}
+# ASGI_APPLICATION = "asgi.channel_layer"
+# CHANNELS_WS_PROTOCOLS = ["graphql-ws"]
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "asgiref.inmemory.ChannelLayer",
+#         "ROUTING": "grapple.urls.channel_routing",
+#     },
+# }
