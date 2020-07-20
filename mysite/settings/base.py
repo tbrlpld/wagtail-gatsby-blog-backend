@@ -47,8 +47,8 @@ INSTALLED_APPS = [
 
     'grapple',
     'graphene_django',
-    # 'channels',
-    # 'wagtail_headless_preview',
+    'wagtail_headless_preview',
+    'corsheaders',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -183,16 +184,8 @@ GRAPPLE_APPS = {
 GRAPPLE_ADD_SEARCH_HIT = False
 
 # Headless preview
-# HEADLESS_PREVIEW_CLIENT_URLS = {
-#     "default": "http://localhost:8001/preview",
-# }
-# HEADLESS_PREVIEW_LIVE = False
+CORS_ORIGIN_ALLOW_ALL = True
 
-# ASGI_APPLICATION = "asgi.channel_layer"
-# CHANNELS_WS_PROTOCOLS = ["graphql-ws"]
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "asgiref.inmemory.ChannelLayer",
-#         "ROUTING": "grapple.urls.channel_routing",
-#     },
-# }
+HEADLESS_PREVIEW_CLIENT_URLS = {
+    "default": "http://localhost:8001/preview",
+}
