@@ -34,14 +34,6 @@ class BlogIndexPage(Page):
         FieldPanel('intro', classname='full'),
     ]
 
-    def get_context(self, request):
-        context = super().get_context(request)
-
-        blogposts = self.get_children().live().order_by('-first_published_at')
-
-        context['blogposts'] = blogposts
-        return context
-
 
 @gph.register_query_field('blogCategory', 'blogCategories', {
     'id': graphene.ID(),
@@ -83,24 +75,6 @@ class BlogCategory(Page):
         urllist.insert(1, 'categories')
         page_url_raltive_to_site_root = '/'.join(urllist)
         return (site_id, site_root, page_url_raltive_to_site_root)
-
-
-class BlogTagIndexPage(Page):
-    parent_page_types = [
-        'home.HomePage',
-    ]
-    subpage_types = [
-        'blog.BlogPage',
-    ]
-
-    def get_context(self, request):
-        context = super().get_context(request)
-
-        tag = request.GET.get('tag')
-        blogposts = BlogPage.objects.filter(tags__name=tag)
-
-        context['blogposts'] = blogposts
-        return context
 
 
 class BlogPageTag(TaggedItemBase):
