@@ -1,5 +1,3 @@
-# Third-Party Imports
-# First-Party Imports
 from django.db import models
 import graphene
 from grapple import helpers as gph
@@ -19,8 +17,7 @@ from wagtail.core.models import Orderable, Page
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-
-# from wagtail_headless_preview import models as wthpm
+from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 
 class BlogIndexPage(Page):
@@ -36,14 +33,6 @@ class BlogIndexPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname='full'),
     ]
-
-    def get_context(self, request):
-        context = super().get_context(request)
-
-        blogposts = self.get_children().live().order_by('-first_published_at')
-
-        context['blogposts'] = blogposts
-        return context
 
 
 @gph.register_query_field('blogCategory', 'blogCategories', {
@@ -88,24 +77,6 @@ class BlogCategory(Page):
         return (site_id, site_root, page_url_raltive_to_site_root)
 
 
-class BlogTagIndexPage(Page):
-    parent_page_types = [
-        'home.HomePage',
-    ]
-    subpage_types = [
-        'blog.BlogPage',
-    ]
-
-    def get_context(self, request):
-        context = super().get_context(request)
-
-        tag = request.GET.get('tag')
-        blogposts = BlogPage.objects.filter(tags__name=tag)
-
-        context['blogposts'] = blogposts
-        return context
-
-
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
         'BlogPage',
@@ -119,7 +90,7 @@ class BlogPageTag(TaggedItemBase):
     'url': graphene.String(),
     'slug': graphene.String(),
 })
-class BlogPage(Page):
+class BlogPage(HeadlessPreviewMixin, Page):
     parent_page_types = [
         BlogIndexPage,
     ]
