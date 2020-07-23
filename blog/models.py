@@ -99,7 +99,30 @@ class BlogPage(HeadlessPreviewMixin, Page):
     author = models.CharField(max_length=250, blank=True)
     date = models.DateField('Post date')
     intro = models.CharField(max_length=250)
-    body = RichTextField(blank=True)
+    body = RichTextField(
+        blank=True,
+        features=[
+            'bold',
+            'italic',
+            'superscript',
+            'subscript',
+            'strikethrough',
+            'ol',
+            'ul',
+            'link',
+            'document-link',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'blockquote',
+            'code',
+            'hr',
+            # 'image',
+            # 'embed',
+        ]
+    )
     freeformbody = StreamField(
         [
             ('heading', blocks.CharBlock(classname='full title')),
