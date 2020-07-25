@@ -14,9 +14,12 @@ from wagtail.admin.edit_handlers import (
 from wagtail.core import blocks
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Orderable, Page
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
+from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 
@@ -128,6 +131,64 @@ class BlogPage(HeadlessPreviewMixin, Page):
             ('heading', blocks.CharBlock(classname='full title')),
             ('paragraph', blocks.RichTextBlock()),
             ('image', ImageChooserBlock()),
+            ('text', blocks.TextBlock()),
+            ('email', blocks.EmailBlock(help_text='Your email goes here.')),
+            ('integer', blocks.IntegerBlock(help_text='Just a number.')),
+            ('float', blocks.FloatBlock(help_text='A floating point number.')),
+            ('decimal', blocks.DecimalBlock(help_text='A decimal number.')),
+            ('regex', blocks.RegexBlock(
+                regex=r'^.*stuff.*$',
+                help_text='A string with stuff in the middle.',
+                error_messages={
+                    'invalid': 'You need to have " stuff " in the string.',
+                },
+            )),
+            ('url', blocks.URLBlock()),
+            ('bool', blocks.BooleanBlock(required=False)),
+            ('date', blocks.DateBlock()),
+            ('time', blocks.TimeBlock()),
+            ('datetime', blocks.DateTimeBlock()),
+            ('rawhtml', blocks.RawHTMLBlock(
+                help_text='Here you can show off your HTML skills.')),
+            ('blockquote', blocks.BlockQuoteBlock()),
+            ('choice', blocks.ChoiceBlock(
+                choices=(
+                    ('yes', 'Yes'),
+                    ('no', 'No'),
+                    ('maybe', 'Maybe'),
+                ),
+            )),
+            # Only in wagtail > 2.8
+            # ('multiple_choice', blocks.MultipleChoiceBlock(
+            #     choices=(
+            #         ('scotch', 'Scotch'),
+            #         ('beer', 'Beer'),
+            #         ('bourbon', 'Bourbon'),
+            #         ('bubbly', 'Bubbly'),
+            #     )
+            # )),
+            ('page', blocks.PageChooserBlock()),
+            ('doc', DocumentChooserBlock()),
+            # Requires a snippet class to be passed. I currently have no
+            # snippet available.
+            # ('snippet', SnippetChooserBlock()),
+            ('embed', EmbedBlock()),
+            ('static', blocks.StaticBlock(
+                admin_text='Latest Posts (no configuration needed)',
+                help_text='If you include this block, the latest posts will be displayed here.'
+            )),
+            ('person', blocks.StructBlock([
+                ('first_name', blocks.CharBlock()),
+                ('last_name', blocks.CharBlock()),
+                ('photo', ImageChooserBlock(required=False)),
+                ('biography', blocks.TextBlock()),
+            ], icon='user')),
+            ('substream', blocks.StreamBlock([
+                ('image', ImageChooserBlock()),
+                ('quote', blocks.BlockQuoteBlock()),
+                ('author', blocks.CharBlock(min_length=5)),
+            ])),
+
         ],
         blank=True,
     )
