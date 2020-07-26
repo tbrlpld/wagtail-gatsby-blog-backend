@@ -135,7 +135,10 @@ class BlogPage(HeadlessPreviewMixin, Page):
             ('email', blocks.EmailBlock(help_text='Your email goes here.')),
             ('integer', blocks.IntegerBlock(help_text='Just a number.')),
             ('float', blocks.FloatBlock(help_text='A floating point number.')),
-            ('decimal', blocks.DecimalBlock(help_text='A decimal number.')),
+            ('decimal', blocks.DecimalBlock(
+                help_text='A decimal number.',
+                decimal_places=2,
+            )),
             ('regex', blocks.RegexBlock(
                 regex=r'^.*stuff.*$',
                 help_text='A string with stuff in the middle.',
@@ -183,6 +186,9 @@ class BlogPage(HeadlessPreviewMixin, Page):
                 ('photo', ImageChooserBlock(required=False)),
                 ('biography', blocks.TextBlock()),
             ], icon='user')),
+            ('list', blocks.ListBlock(
+                blocks.CharBlock(label='List Item')
+            )),
             ('substream', blocks.StreamBlock([
                 ('image', ImageChooserBlock()),
                 ('quote', blocks.BlockQuoteBlock()),
