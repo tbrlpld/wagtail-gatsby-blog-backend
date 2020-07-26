@@ -194,7 +194,6 @@ class BlogPage(HeadlessPreviewMixin, Page):
                 ('quote', blocks.BlockQuoteBlock()),
                 ('author', blocks.CharBlock(min_length=5)),
             ])),
-
         ],
         blank=True,
     )
