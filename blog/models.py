@@ -183,7 +183,6 @@ class BlogPage(HeadlessPreviewMixin, Page):
             ('person', blocks.StructBlock([
                 ('first_name', blocks.CharBlock()),
                 ('last_name', blocks.CharBlock()),
-                ('photo', ImageChooserBlock(required=False)),
                 ('biography', blocks.TextBlock()),
             ], icon='user')),
             ('list', blocks.ListBlock(
