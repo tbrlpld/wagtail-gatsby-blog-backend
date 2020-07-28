@@ -184,6 +184,7 @@ class BlogPage(HeadlessPreviewMixin, Page):
                 ('first_name', blocks.CharBlock()),
                 ('last_name', blocks.CharBlock()),
                 ('biography', blocks.TextBlock()),
+                ('pic', ImageChooserBlock(required=False)),
             ], icon='user')),
             ('list', blocks.ListBlock(
                 blocks.CharBlock(label='List Item')
