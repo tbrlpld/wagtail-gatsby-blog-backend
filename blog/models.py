@@ -189,6 +189,9 @@ class BlogPage(HeadlessPreviewMixin, Page):
             ('list', blocks.ListBlock(
                 blocks.CharBlock(label='List Item')
             )),
+            # There are open issues with the stream block: https://github.com/GrappleGQL/wagtail-grapple/pull/54
+            # These issues make it basically impossible to query meaningful data.
+            # Until that is resolved, I should possibly stay clear of of using the SteamBlock.
             ('substream', blocks.StreamBlock([
                 ('image', ImageChooserBlock()),
                 ('quote', blocks.BlockQuoteBlock()),
