@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import redirect
 import graphene
 from grapple import helpers as gph
 from grapple import models as gpm
@@ -262,6 +263,10 @@ class BlogPage(HeadlessPreviewMixin, Page):
             is_list=True,
         ),
     ]
+
+    def serve(self, request):
+        site_id, site_root, page_url = self.get_url_parts(request)
+        return redirect('http://localhost:8001' + page_url)
 
 
 class BlogPageGalleryImage(Orderable):
