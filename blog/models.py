@@ -58,7 +58,7 @@ class BlogCategory(Page):
     ]
 
     graphql_fields = [
-        gpm.GraphQLString('title'),
+        gpm.GraphQLString('title', required=True),
         gpm.GraphQLString('intro'),
         gpm.GraphQLCollection(
             gpm.GraphQLForeignKey,
@@ -235,7 +235,7 @@ class BlogPage(HeadlessPreviewMixin, Page):
     ]
 
     graphql_fields = [
-        gpm.GraphQLString('title'),
+        gpm.GraphQLString('title', required=True),
         gpm.GraphQLString('date'),
         gpm.GraphQLString('author'),
         gpm.GraphQLString('intro'),

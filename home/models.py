@@ -1,10 +1,8 @@
 from django.db import models
-
-from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel
-
 from grapple import models as gpm
+from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.core.fields import RichTextField
+from wagtail.core.models import Page
 
 
 class HomePage(Page):
@@ -19,6 +17,6 @@ class HomePage(Page):
     ]
 
     graphql_fields = [
-        gpm.GraphQLString('title'),
+        gpm.GraphQLString('title', required=True),
         gpm.GraphQLString('body'),
     ]
