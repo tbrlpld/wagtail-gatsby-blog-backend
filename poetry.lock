@@ -640,19 +640,23 @@ category = "main"
 description = "A django app that speeds up and simplifies implementing a GraphQL endoint!"
 name = "wagtail-grapple"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">= 3.6"
 version = "0.5.1"
 
 [package.dependencies]
 Django = ">=2.2,<2.3"
-asgi-redis = "*"
+asgi_redis = "*"
 channels = "1.1.8"
 graphene-django = "2.7.1"
 graphql-core = "2.2.1"
-graphql-ws = "*"
+graphql_ws = "*"
 wagtail = ">=2.5,<2.9"
 wagtail-headless-preview = "*"
 
+[package.source]
+reference = "d4008b063db70e70b8497f132fbdb73e77a3459c"
+type = "git"
+url = "https://github.com/GrappleGQL/wagtail-grapple.git"
 [[package]]
 category = "main"
 description = "Wagtail previews in headless mode."
@@ -700,7 +704,7 @@ test = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [metadata]
-content-hash = "dc7c394a7c68855c0073a70f234acde03d9ecb52841a46c917bf5b126b987209"
+content-hash = "dbbe1a630acb0d28e86aa06cfd834a9d6d1b16033825839d6bf97be1b34d2396"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -988,10 +992,7 @@ wagtail = [
     {file = "wagtail-2.8.2-py3-none-any.whl", hash = "sha256:2193da20d37021f5f31ee0f3322e7386678537d6e154bb285a11977935333a94"},
     {file = "wagtail-2.8.2.tar.gz", hash = "sha256:f6530a7ef2ca3207a6e5c1106bf1c9b6ce86fc2d7c96276e10d6f4ae86308c70"},
 ]
-wagtail-grapple = [
-    {file = "wagtail-grapple-0.5.1.tar.gz", hash = "sha256:73814e0dd09495fdd5d130631e4109b8a21df59458681d4a0c5c2841ea57ea33"},
-    {file = "wagtail_grapple-0.5.1-py3-none-any.whl", hash = "sha256:77f453eccf732128c95d3d08e97f9f8305b562cf4ce75b2d59889e724b845ef4"},
-]
+wagtail-grapple = []
 wagtail-headless-preview = [
     {file = "wagtail-headless-preview-0.1.4.tar.gz", hash = "sha256:d1fd0acb4c90468bcfad0a99df11b55defd7fdcdb204ecd4b11052e5f1e10295"},
     {file = "wagtail_headless_preview-0.1.4-py2.py3-none-any.whl", hash = "sha256:782060d1150a33e6c3e5dc7f38498281c0526f3fbd3ae81ab3e1df5c230c4b80"},
