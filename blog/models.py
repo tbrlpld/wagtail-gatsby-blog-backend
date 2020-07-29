@@ -185,7 +185,7 @@ class BlogPage(HeadlessPreviewMixin, Page):
                 ('first_name', blocks.CharBlock()),
                 ('last_name', blocks.CharBlock()),
                 ('biography', blocks.TextBlock()),
-                ('pic', ImageChooserBlock(required=False)),
+                # ('pic', ImageChooserBlock(required=False)),
             ], icon='user')),
             ('list', blocks.ListBlock(
                 blocks.CharBlock(label='List Item')
@@ -194,7 +194,7 @@ class BlogPage(HeadlessPreviewMixin, Page):
             # These issues make it basically impossible to query meaningful data.
             # Until that is resolved, I should possibly stay clear of of using the SteamBlock.
             ('substream', blocks.StreamBlock([
-                ('image', ImageChooserBlock()),
+                # ('image', ImageChooserBlock()),
                 ('quote', blocks.BlockQuoteBlock()),
                 ('author', blocks.CharBlock(min_length=5)),
             ])),
