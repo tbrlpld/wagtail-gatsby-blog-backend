@@ -8,9 +8,9 @@ authors = ["Tibor Leupold <tibor@lpld.io>"]
 python = "^3.7"
 wagtail = ">=2.5"
 django = "^2.2"
-wagtail-grapple = {git = "https://github.com/GrappleGQL/wagtail-grapple.git"}
 isort = "^4.3.21"
 django-cors-headers = "^3.4.0"
+wagtail-grapple = "^0.5.1"
 
 [tool.poetry.dev-dependencies]
 
