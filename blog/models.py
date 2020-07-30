@@ -23,8 +23,10 @@ from wagtail.search import index
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 
+from headless.models import HeadlessServeMixin
 
-class BlogIndexPage(Page):
+
+class BlogIndexPage(HeadlessServeMixin, Page):
     parent_page_types = [
         'home.HomePage',
     ]
@@ -94,7 +96,7 @@ class BlogPageTag(TaggedItemBase):
     'url': graphene.String(),
     'slug': graphene.String(),
 })
-class BlogPage(HeadlessPreviewMixin, Page):
+class BlogPage(HeadlessServeMixin, HeadlessPreviewMixin, Page):
     parent_page_types = [
         BlogIndexPage,
     ]
@@ -264,10 +266,6 @@ class BlogPage(HeadlessPreviewMixin, Page):
             required=False,
         ),
     ]
-
-    def serve(self, request):
-        site_id, site_root, page_url = self.get_url_parts(request)
-        return redirect('http://localhost:8001' + page_url)
 
 
 class BlogPageGalleryImage(Orderable):
