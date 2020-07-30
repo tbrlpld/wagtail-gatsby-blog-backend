@@ -257,10 +257,11 @@ class BlogPage(HeadlessPreviewMixin, Page):
             'category',
             'blog.BlogCategory',
         ),
-        gpm.GraphQLField(
+        gpm.GraphQLCollection(
+            gpm.GraphQLForeignKey,
             'gallery_images',
-            'blog.schema.BlogPageGalleryImageType',
-            is_list=True,
+            'blog.BlogPageGalleryImage',
+            required=False,
         ),
     ]
 
@@ -292,4 +293,11 @@ class BlogPageGalleryImage(Orderable):
     panels = [
         ImageChooserPanel('image'),
         FieldPanel('caption'),
+    ]
+
+    graphql_fields = [
+        gpm.GraphQLImage(
+            'image',
+            required=True,
+        ),
     ]
