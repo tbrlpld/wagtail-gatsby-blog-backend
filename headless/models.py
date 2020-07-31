@@ -18,9 +18,21 @@ from a different host. This is what the defined mixin allows.
 
 """
 
-from django import shortcuts as djshrt  # type: ignore
+from django import conf as djconf  # type: ignore
+from django.core import exceptions as djexcp  # type: ignore
 from django import http as djhttp
+from django import shortcuts as djshrt  # type: ignore
 from wagtail.core import models as wtcm  # type: ignore
+
+
+try:
+    HEADLESS_SERVE_BASE_URL = djconf.settings.HEADLESS_SERVE_BASE_URL
+except AttributeError as error:
+    raise djexcp.ImproperlyConfigured(
+        'You seem to be using the HeadlessServeMixin, but have not '
+        + 'defined the HEADLESS_SERVE_BASE_URL setting. '
+        + 'With out this setting the redirect will not work.',
+    ) from error
 
 
 class HeadlessServeMixin(object):
@@ -29,7 +41,7 @@ class HeadlessServeMixin(object):
 
     The URL of the requested page is kept the same, only this host is
     overridden. To control which host the redirect should lead to, use
-    the SERVE_HEADLESS_WAGTAIL_HOST setting.
+    the HEADLESS_SERVE_BASE_URL setting.
     """
 
     def serve(
@@ -51,5 +63,5 @@ class HeadlessServeMixin(object):
         """
         site_id, site_root, relative_page_url = self.get_url_parts(request)
         return djshrt.redirect(
-            'http://localhost:8001{0}'.format(relative_page_url),
+            '{0}{1}'.format(HEADLESS_SERVE_BASE_URL, relative_page_url),
         )

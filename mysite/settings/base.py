@@ -190,3 +190,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 HEADLESS_PREVIEW_CLIENT_URLS = {
     "default": "http://localhost:8001/preview",
 }
+
+# Headless serve
+HEADLESS_SERVE_BASE_URL = "http://localhost:8001"
