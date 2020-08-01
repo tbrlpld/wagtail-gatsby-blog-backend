@@ -22,7 +22,7 @@ RUN pip install poetry
 RUN poetry env use system
 RUN poetry config virtualenvs.create false
 RUN poetry install 
-RUN pip install gunicorn
+RUN poetry add gunicorn
 
 # Copy the current directory contents into the container at /code/
 COPY . /code/
@@ -35,4 +35,5 @@ RUN chown -R wagtail /code
 USER wagtail
 
 EXPOSE 8000
-CMD exec gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
+# CMD exec gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
+CMD exec python manage.py runserver 0:8000
