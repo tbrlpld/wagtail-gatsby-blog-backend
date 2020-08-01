@@ -11,11 +11,16 @@ to list links to all the available BlogPages.
 from wagtail.admin import edit_handlers as wtaeh  # type: ignore
 from wagtail.core import fields as wtcf  # type: ignore
 from wagtail.core import models as wtcm  # type: ignore
+from wagtail_headless_preview import models as wthpm
 
 from headless.models import HeadlessServeMixin
 
 
-class BlogIndexPage(HeadlessServeMixin, wtcm.Page):
+class BlogIndexPage(
+    HeadlessServeMixin,
+    wthpm.HeadlessPreviewMixin,
+    wtcm.Page,
+):
     """
     Parent to the BlogPage model.
 
