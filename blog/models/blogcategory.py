@@ -10,6 +10,39 @@ from wagtail.core import fields as wtcf  # type: ignore
 from wagtail.core import models as wtcm  # type: ignore
 
 
+class BlogCategoriesIndex(wtcm.Page):
+    """
+    Simple index page to hold the different BlogCategories.
+
+    This index only serves as a container and to fully create pages for
+    a complete URL structure.
+
+    """
+
+    parent_page_types = [
+        'home.HomePage',
+    ]
+    subpage_types = [
+        'blog.BlogCategory',
+    ]
+    max_count = 1
+
+    content_panels = [
+        wtaeh.HelpPanel(
+            'This is only a container page and no content needs to be'
+            + ' defined. This page only serves as an organizational element.'
+            + ' Create the actual categories as child pages of this page.',
+        ),
+    ]
+    promote_panels = []
+    settings_panels = []
+
+    def save(self, clean=True, **kwargs):
+        """Set forced values and save page."""
+        self.title = 'Categories'
+        super().save(**kwargs)
+
+
 @gph.register_query_field('blogCategory', 'blogCategories', {
     'id': graphene.ID(),
     'url': graphene.String(),
@@ -25,7 +58,7 @@ class BlogCategory(wtcm.Page):
     """
 
     parent_page_types = [
-        'home.HomePage',
+        'blog.BlogCategoriesIndex',
     ]
     subpage_types = [
     ]
@@ -45,16 +78,3 @@ class BlogCategory(wtcm.Page):
             'blog.BlogPage',
         ),
     ]
-
-    def get_url_parts(self, request=None):
-        site_id, site_root, page_url_raltive_to_site_root = super(
-        ).get_url_parts(request)
-        # URL typically has leading and trailing slashes. When splitting, an
-        # element with empty string remains in the list in the beginning and
-        # end. This is useful for joining again (after the alteration).
-        urllist = page_url_raltive_to_site_root.split('/')
-        # Inserting 'category' after the empty string, before the first
-        # real element.
-        urllist.insert(1, 'categories')
-        page_url_raltive_to_site_root = '/'.join(urllist)
-        return (site_id, site_root, page_url_raltive_to_site_root)
