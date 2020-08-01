@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 # Standard Library Imports
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import corsheaders
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -185,7 +186,11 @@ GRAPPLE_APPS = {
 GRAPPLE_ADD_SEARCH_HIT = False
 
 # Headless preview
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8001",
+]
+CORS_URLS_REGEX = r'^/graphql.*$'
 
 HEADLESS_PREVIEW_CLIENT_URLS = {
     "default": "http://localhost:8001/preview",
