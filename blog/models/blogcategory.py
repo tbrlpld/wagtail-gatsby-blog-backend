@@ -8,9 +8,16 @@ from grapple import models as gpm  # type: ignore
 from wagtail.admin import edit_handlers as wtaeh  # type: ignore
 from wagtail.core import fields as wtcf  # type: ignore
 from wagtail.core import models as wtcm  # type: ignore
+from wagtail_headless_preview import models as wthpm
+
+from headless.models import HeadlessServeMixin
 
 
-class BlogCategoriesIndex(wtcm.Page):
+class BlogCategoriesIndex(
+    HeadlessServeMixin,
+    wthpm.HeadlessPreviewMixin,
+    wtcm.Page,
+):
     """
     Simple index page to hold the different BlogCategories.
 
@@ -48,7 +55,11 @@ class BlogCategoriesIndex(wtcm.Page):
     'url': graphene.String(),
     'slug': graphene.String(),
 })
-class BlogCategory(wtcm.Page):
+class BlogCategory(
+    HeadlessServeMixin,
+    wthpm.HeadlessPreviewMixin,
+    wtcm.Page,
+):
     """
     Simple BlogCategory page model.
 
