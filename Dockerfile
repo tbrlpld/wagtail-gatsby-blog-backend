@@ -6,19 +6,30 @@ LABEL maintainer="hello@wagtail.io"
 ENV PYTHONUNBUFFERED 1
 ENV DJANGO_ENV dev
 
-COPY ./requirements.txt /code/requirements.txt
+# Set the working directory to /code/
+WORKDIR /code/
+
+# Prepare dependency installation
+# COPY ./requirements.txt /code/requirements.txt
+COPY ./pyproject.toml /code/pyproject.toml
+COPY ./poetry.lock /code/poetry.lock
 RUN pip install --upgrade pip
+RUN pip install poetry
+
 # Install any needed packages specified in requirements.txt
-RUN pip install -r /code/requirements.txt
+# RUN pip install -r /code/requirements.txt
+# RUN poetry shell
+RUN poetry env use system
+RUN poetry config virtualenvs.create false
+RUN poetry install 
 RUN pip install gunicorn
 
 # Copy the current directory contents into the container at /code/
 COPY . /code/
-# Set the working directory to /code/
-WORKDIR /code/
 
 RUN python manage.py migrate
 
+# Create non-default user
 RUN useradd wagtail
 RUN chown -R wagtail /code
 USER wagtail
