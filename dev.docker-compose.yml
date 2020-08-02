@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+    backend:
+        build: 
+            context: ./
+            dockerfile: dev.Dockerfile
+        image: wagtail-gatsby-blog-backend
+        # command: Not needed. Already defined in Dockerfile
+        restart: "no"  # probably not in development
+        ports: 
+            - "127.0.0.1:8000:8000"
+        volumes:
+            - ./:/code/
+
