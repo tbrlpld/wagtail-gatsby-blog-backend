@@ -4,11 +4,8 @@ services:
         build: 
             context: ./
             dockerfile: Dockerfile
-        image: wagtail-gatsby-blog-backend
+        image: wagtail-gatsby-blog-backend:production
         # command: Not needed. Already defined in Dockerfile
         restart: "no"  # probably not in development
         ports: 
             - "127.0.0.1:8000:8000"
-        volumes:
-            - ./:/code/
-
