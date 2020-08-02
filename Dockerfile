@@ -2,9 +2,6 @@
 FROM python:3.7
 LABEL maintainer="hello@wagtail.io"
 
-# Set environment varibles
-ENV DJANGO_SETTINGS_MODULE="mysite.settings.production"
-
 # Set the working directory to /code/
 WORKDIR /code/
 
@@ -12,20 +9,28 @@ WORKDIR /code/
 RUN pip install --upgrade pip
 RUN pip install poetry
 
+# Create non-default user 
+# Since I am using the venv, I will not need to be root after this point
+RUN useradd wagtail
+RUN mkdir /home/wagtail
+RUN chown -R wagtail /home/wagtail
+RUN chown -R wagtail /code
+USER wagtail
+
 # Pull repo
 RUN git clone https://github.com/tbrlpld/wagtail-gatsby-blog-backend.git .
 
 # Install any needed packages
+
 RUN poetry env use system
-RUN poetry config virtualenvs.in-project true
+RUN poetry config virtualenvs.in-project true 
 RUN poetry install 
 
-RUN python manage.py migrate
+# Add .env file
+COPY ./.env /code/.env
 
-# Create non-default user
-RUN useradd wagtail
-RUN chown -R wagtail /code
-USER wagtail
+RUN ls -la
+RUN ./.venv/bin/python manage.py migrate
 
 EXPOSE 8000
-CMD exec gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
+CMD exec ./.venv/bin/gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
