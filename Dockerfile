@@ -21,16 +21,14 @@ USER wagtail
 RUN git clone https://github.com/tbrlpld/wagtail-gatsby-blog-backend.git .
 
 # Install any needed packages
-
 RUN poetry env use system
-RUN poetry config virtualenvs.in-project true 
 RUN poetry install 
 
 # Add .env file
 COPY ./.env /code/.env
 
 RUN ls -la
-RUN ./.venv/bin/python manage.py migrate
+RUN $(poetry env info --path)/bin/python manage.py migrate
 
 EXPOSE 8000
-CMD exec ./.venv/bin/gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
+CMD exec $(poetry env info --path)/bin/gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
