@@ -11,15 +11,14 @@ WORKDIR /code/
 # Prepare dependency installation
 RUN pip install --upgrade pip
 RUN pip install poetry
-RUN poetry env use system
-RUN poetry config virtualenvs.create false
 
 # Pull repo
 RUN git clone https://github.com/tbrlpld/wagtail-gatsby-blog-backend.git .
 
 # Install any needed packages
+RUN poetry env use system
+RUN poetry config virtualenvs.in-project true
 RUN poetry install 
-RUN poetry add gunicorn
 
 RUN python manage.py migrate
 
