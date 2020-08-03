@@ -8,6 +8,6 @@ services:
             dockerfile: Dockerfile
         image: wagtail-gatsby-blog-backend
         # command: Not needed. Already defined in Dockerfile
-        restart: "no"  # probably not in development
+        restart: unless-stopped
         ports: 
             - "127.0.0.1:8000:8000"
