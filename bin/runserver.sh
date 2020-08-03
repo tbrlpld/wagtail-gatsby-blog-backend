@@ -2,6 +2,7 @@ export VENV=$(poetry env info --path)
 if [ $DJANGO_SETTINGS_MODULE = "mysite.settings.dev" ]  
 then 
 	echo "Development"
+	git pull --ff-only
 	$VENV/bin/gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3 --reload  --error-logfile - --log-file - --log-level debug
 else 
 	echo "Production"
