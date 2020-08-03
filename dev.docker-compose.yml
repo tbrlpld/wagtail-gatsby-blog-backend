@@ -1,9 +1,13 @@
 version: "3.8"
 services:
     backend:
+        env_file: 
+            - .env
+        environment:
+            - DJANGO_SETTINGS_MODULE=mysite.settings.dev
         build: 
             context: ./
-            dockerfile: dev.Dockerfile
+            dockerfile: Dockerfile
         image: wagtail-gatsby-blog-backend
         # command: Not needed. Already defined in Dockerfile
         restart: "no"  # probably not in development
