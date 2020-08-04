@@ -10,7 +10,7 @@ server {
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;
 
-        alias /vagrant/static;
+        alias <REPLACEME>/static;
         expires 365d;
     }
     location / {

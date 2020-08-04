@@ -13,7 +13,9 @@ scriptdir=$(dirname $0)
 cp $scriptdir/nginx/nginx.service /lib/systemd/system/nginx.service
 
 # Install site config
-cp $scriptdir/nginx/wagtail.nginx /etc/nginx/sites-enabled/wagtail.nginx
+nginxconf=$(<$scriptdir/nginx/wagtail.nginx.template)
+echo "${nginxconf//<REPLACEME>/$scriptdir}" > /etc/nginx/sites-enabled/wagtail.nginx
+# cat /etc/nginx/sites-enabled/wagtail.nginx
 
 # Update service
 systemctl enable nginx
