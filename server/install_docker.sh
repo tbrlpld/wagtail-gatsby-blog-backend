@@ -1,3 +1,4 @@
+#!/bin/sh
 # Running as root (or sudoer)
 apt-get update
 if ! command -v docker &> /dev/null

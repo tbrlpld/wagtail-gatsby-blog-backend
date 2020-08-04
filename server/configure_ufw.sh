@@ -1,3 +1,4 @@
+#!/bin/sh
 if [[ $(sudo ufw status) == "Status: inactive" ]] 
 then
 	echo "UFW not active. Configuring..."

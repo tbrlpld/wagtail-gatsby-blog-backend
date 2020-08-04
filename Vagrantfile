@@ -79,6 +79,7 @@ Vagrant.configure("2") do |config|
     chmod u+x /home/vagrant/app/*
     /home/vagrant/app/install_docker.sh
     /home/vagrant/app/install_nginx.sh
+    /home/vagrant/app/configure_nginx.sh
     /home/vagrant/app/configure_ufw.sh
   SHELL
 end
