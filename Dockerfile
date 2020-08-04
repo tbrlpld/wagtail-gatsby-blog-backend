@@ -32,4 +32,4 @@ COPY ./.env /code/.env
 
 EXPOSE 8000
 # CMD exec $(poetry env info --path)/bin/gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3 --error-logfile - --log-file - --log-level debug
-CMD /code/bin/runserver.sh
+CMD /code/container/runapp.sh
