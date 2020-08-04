@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Install nginx
 if ! command -v nginx &> /dev/null 
 then 

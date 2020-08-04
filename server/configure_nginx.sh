@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+echo "Configuring nginx..."
 scriptdir=$(dirname $0)
 # Install custom service definition
 cp $scriptdir/nginx/nginx.service /lib/systemd/system/nginx.service
