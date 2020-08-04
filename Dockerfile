@@ -19,16 +19,14 @@ USER wagtail
 
 # Pull repo
 RUN git clone https://github.com/tbrlpld/wagtail-gatsby-blog-backend.git .
-
-# Install any needed packages
+# Install dependencies
 RUN poetry env use system
 RUN poetry install 
+# Add local data. In development there will be a repo. In production there will only be a few data files (like the DB and the media files).
+COPY --chown=wagtail . .
 
 # Add .env file
-COPY ./.env /code/.env
-
-# RUN $(poetry env info --path)/bin/python manage.py migrate
-# RUN $(poetry env info --path)/bin/python manage.py collectstatic --noinput
+COPY --chown=wagtail ./.env /code/.env
 
 EXPOSE 8000
 # CMD exec $(poetry env info --path)/bin/gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3 --error-logfile - --log-file - --log-level debug
