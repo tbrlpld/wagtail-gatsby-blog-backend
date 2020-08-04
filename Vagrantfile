@@ -74,7 +74,11 @@ Vagrant.configure("2") do |config|
   # config.vm.provision "shell", inline: <<-SHELL
   #   apt-get update
   # SHELL
-  config.vm.provision "shell", path: "./bin/host/install_docker.sh"
-  config.vm.provision "shell", path: "./bin/host/install_nginx.sh"
-  config.vm.provision "shell", path: "./bin/host/configure_ufw.sh"
+  config.vm.provision "file", source: "./server", destination: "/home/vagrant/app"
+  config.vm.provision "shell", inline: <<-SHELL
+    chmod u+x /home/vagrant/app/*
+    /home/vagrant/app/install_docker.sh
+    /home/vagrant/app/install_nginx.sh
+    /home/vagrant/app/configure_ufw.sh
+  SHELL
 end

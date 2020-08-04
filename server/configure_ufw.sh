@@ -4,6 +4,7 @@ then
 	ufw default deny incoming
 	ufw default allow outgoing
 	ufw allow ssh
+	ufw allow 2222/tcp  # Only for vagrant VM.
 	ufw allow 2200/tcp
 	ufw allow www
 	ufw --force enable
