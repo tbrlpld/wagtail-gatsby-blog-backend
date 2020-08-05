@@ -1,3 +1,5 @@
 .venv
 .vagrant
 .git
+.env
+dist

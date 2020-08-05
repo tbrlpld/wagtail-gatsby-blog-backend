@@ -12,7 +12,7 @@ then
 else 
 	echo "Detected production environment."
 	# In production the repo does not need to be present on the host. The repo changes are pulled right into the container before the app starts.
-	echo "Pulling new code fro repo..."
+	echo "Pulling new code from repo..."
 	git stash  # In case of local uncommitted changes. There should not be any, because you should not work on the production server, but in case of config updates or when trying out things
 	git fetch --all
 	git reset --hard origin/master
