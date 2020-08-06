@@ -23,6 +23,6 @@ gzip $tarfile
 # Extract (this is only to check the contents)
 if [ "$1" = "-x" ]
 then
-	mkdir $distdir/out
-	tar -xzvf $tarfile.gz -C $distdir/out
+	mkdir $distdir/app
+	tar -xzvf $tarfile.gz -C $distdir/app
 fi
