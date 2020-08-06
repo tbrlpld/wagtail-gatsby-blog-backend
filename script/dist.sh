@@ -1,12 +1,14 @@
 #!/bin/bash
-# Get base directory for following operations. 
+
+# Save working directory to return to after script is done
 initialdir=$(pwd)
+
+# Get base directory for following operations. 
 basedir="$(realpath $(dirname $(dirname $0)))"
 cd $basedir
 
 # Remove existing dist dir
 distdir=./dist
-echo $distdir
 
 if [ -d $distdir ]
 then
@@ -17,12 +19,11 @@ fi
 mkdir $distdir 
 
 tarfile=$distdir/dist.tar
-echo $tarfile
 # Add all files in the base dir, except for the ones listed in .dockerignore
+tar --create --file=$tarfile --exclude=./dist --exclude-ignore=.dockerignore .
 # tar ignores .dotfiles by default, so I have to add them back manually.
-tar -cf $tarfile -X .dockerignore ./* .gitignore .dockerignore .python-version
 # Add the .env file explicitly (this file is usually ignored)
-tar -rf $tarfile .env
+tar --append --file=$tarfile .env .gitignore .dockerignore .python-version
 # Compress archive
 gzip $tarfile
 
@@ -32,4 +33,6 @@ then
 	mkdir $distdir/app
 	tar -xzvf $tarfile.gz -C $distdir/app
 fi
+
+# Return to initial working directory
 cd $initialdir
