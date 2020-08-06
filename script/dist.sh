@@ -1,9 +1,13 @@
 #!/bin/bash
 # Get base directory for following operations. 
-basedir="$(dirname $(dirname $0))"
+initialdir=$(pwd)
+basedir="$(realpath $(dirname $(dirname $0)))"
+cd $basedir
 
 # Remove existing dist dir
-distdir=$basedir/dist
+distdir=./dist
+echo $distdir
+
 if [ -d $distdir ]
 then
 	rm -rf $distdir
@@ -13,10 +17,12 @@ fi
 mkdir $distdir 
 
 tarfile=$distdir/dist.tar
+echo $tarfile
 # Add all files in the base dir, except for the ones listed in .dockerignore
-tar -cf $tarfile -X .dockerignore $basedir/* $basedir/.gitignore $basedir/.dockerignore $basedir/.python-version
+# tar ignores .dotfiles by default, so I have to add them back manually.
+tar -cf $tarfile -X .dockerignore ./* .gitignore .dockerignore .python-version
 # Add the .env file explicitly (this file is usually ignored)
-tar -rf $tarfile $basedir/.env
+tar -rf $tarfile .env
 # Compress archive
 gzip $tarfile
 
@@ -26,3 +32,4 @@ then
 	mkdir $distdir/app
 	tar -xzvf $tarfile.gz -C $distdir/app
 fi
+cd $initialdir
