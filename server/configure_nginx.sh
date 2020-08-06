@@ -7,7 +7,7 @@ cp $scriptdir/nginx/nginx.service /lib/systemd/system/nginx.service
 
 # Install site config
 nginxconf=$(<$scriptdir/nginx/wagtail.nginx.template)
-echo "${nginxconf//<REPLACEME>/$basedir}" > /etc/nginx/sites-enabled/wagtail.nginx
+echo "${nginxconf//<REPOROOT>/$basedir}" > /etc/nginx/sites-enabled/wagtail.nginx
 # cat /etc/nginx/sites-enabled/wagtail.nginx
 
 # Update service

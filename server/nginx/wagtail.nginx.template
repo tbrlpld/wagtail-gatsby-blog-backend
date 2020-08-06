@@ -10,7 +10,16 @@ server {
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;
 
-        alias <REPLACEME>/static;
+        alias <REPOROOT>/static;
+
+        expires 365d;
+    }
+    location /media {
+        gzip            on;
+        gzip_buffers    8 256k;
+        uwsgi_buffers   8 256k;
+
+        alias <REPOROOT>/media;
 
         expires 365d;
     }
