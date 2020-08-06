@@ -17,6 +17,11 @@ RUN chown -R wagtail /home/wagtail
 RUN chown -R wagtail /code
 USER wagtail
 
+# Initialize git repo. This is be able to pull changes later on.
+RUN git config --global user.name "Tibor Leupold"
+RUN git config --global user.email "tibor@lpld.io"
+RUN git clone https://github.com/tbrlpld/wagtail-gatsby-blog-backend.git .
+
 # Copy dependency definition from local to image. This is mainly for development.
 # It will trigger a rebuild of the image in case the dependencies have changed.
 COPY --chown=wagtail ./pyproject.toml /code/pyproject.toml
@@ -31,5 +36,4 @@ RUN poetry install
 COPY --chown=wagtail . /code/
 
 EXPOSE 8000
-# CMD exec $(poetry env info --path)/bin/gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3 --error-logfile - --log-file - --log-level debug
 CMD /code/container/runapp.sh
