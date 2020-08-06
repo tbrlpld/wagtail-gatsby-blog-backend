@@ -31,7 +31,7 @@ gzip $tarfile
 if [ "$1" = "-x" ]
 then
 	mkdir $distdir/app
-	tar -xzvf $tarfile.gz -C $distdir/app
+	tar -xzf $tarfile.gz -C $distdir/app
 fi
 
 # Return to initial working directory
