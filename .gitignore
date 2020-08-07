@@ -142,4 +142,5 @@ cython_debug/
 # VM
 .vagrant
 
-APPPID
+data/
+data/*
