@@ -1,8 +1,6 @@
 version: "3.8"
 services:
     backend:
-        env_file: 
-            - .env
         build: 
             context: ./
             dockerfile: Dockerfile
@@ -12,6 +10,5 @@ services:
         ports: 
             - "127.0.0.1:8000:8000"
         volumes:
-            - /code/.git
             - ./:/code/
 

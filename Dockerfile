@@ -10,19 +10,14 @@ RUN pip install --upgrade pip
 RUN pip install poetry
 
 # Create non-default user 
-# Since I am using the venv, I will not need to be root after this point
+# Since poetry will be using a venv there is no more need for root access
 RUN useradd wagtail
 RUN mkdir /home/wagtail
 RUN chown -R wagtail /home/wagtail
 RUN chown -R wagtail /code
 USER wagtail
 
-# Initialize git repo. This is be able to pull changes later on.
-RUN git config --global user.name "Tibor Leupold"
-RUN git config --global user.email "tibor@lpld.io"
-RUN git clone https://github.com/tbrlpld/wagtail-gatsby-blog-backend.git .
-
-# Copy dependency definition from local to image. This is mainly for development.
+# Copy dependency definition from local to image.
 # It will trigger a rebuild of the image in case the dependencies have changed.
 COPY --chown=wagtail ./pyproject.toml /code/pyproject.toml
 COPY --chown=wagtail ./poetry.lock /code/poetry.lock
@@ -30,9 +25,7 @@ COPY --chown=wagtail ./poetry.lock /code/poetry.lock
 RUN poetry env use system
 RUN poetry install 
 
-# Add all local code to the image. This mainly makes testing of the production setup
-# easier as a rebuild can contain data that is not pushed to GitHub. 
-# The code directory will be overridden with a mounted volume anyways during runtime.
+# Add all local code to the image.
 COPY --chown=wagtail . /code/
 
 EXPOSE 8000
