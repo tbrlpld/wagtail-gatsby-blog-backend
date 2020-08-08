@@ -75,15 +75,22 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   # SHELL
   config.vm.provision "shell", inline: <<-SHELL
+    echo "*** Configure server setup ***"
     /vagrant/server/install_docker.sh
     /vagrant/server/install_nginx.sh
     /vagrant/server/configure_nginx.sh
     /vagrant/server/configure_ufw.sh
     /vagrant/server/configure_docker.sh
 
+    echo "*** Build production image ***"
+    runuser -l dockrunner -c 'docker-compose -f /vagrant/docker-compose.yml build'
+
+    echo "*** Distribute data ***"
     /vagrant/script/dist.sh
     tar -xf /vagrant/dist/dist.tar.gz -C /home/dockrunner/app
     cd /home/dockrunner/app
     chown -R dockrunner:dockrunner .
+    runuser -l dockrunner -c 'docker-compose -f ~/app/docker-compose.yml up --no-start'
+    runuser -l dockrunner -c 'docker cp ~/app/data app_backend_1:/code'
   SHELL
 end
