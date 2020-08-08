@@ -10,18 +10,24 @@ server {
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;
 
-        alias <REPOROOT>/static;
-
         expires 365d;
+
+        proxy_pass http://127.0.0.1:9000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Protocol $scheme;
     }
     location /media {
         gzip            on;
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;
 
-        alias <REPOROOT>/media;
-
         expires 365d;
+
+        proxy_pass http://127.0.0.1:9000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Protocol $scheme;
     }
     location / {
         try_files $uri @yourapplication;

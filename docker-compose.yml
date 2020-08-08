@@ -11,6 +11,17 @@ services:
             - "127.0.0.1:8000:8000"
         volumes:
             - appdata:/code/data
+    static:
+        build:
+            context: ./container/nginx
+        depends_on:
+            - backend
+        image: wagtail-gatsby-blog-nginx
+        restart: unless-stopped
+        ports: 
+            - "127.0.0.1:9000:80"
+        volumes:
+            - appdata:/code/data
 
 volumes:
     appdata:

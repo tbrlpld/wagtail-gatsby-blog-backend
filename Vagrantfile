@@ -90,6 +90,7 @@ Vagrant.configure("2") do |config|
     tar -xf /vagrant/dist/dist.tar.gz -C /home/dockrunner/app
     cd /home/dockrunner/app
     chown -R dockrunner:dockrunner .
+    runuser -l dockrunner -c 'docker volume create --name appdata'
     runuser -l dockrunner -c 'docker-compose -f ~/app/docker-compose.yml up --no-start'
     runuser -l dockrunner -c 'docker cp ~/app/data app_backend_1:/code'
   SHELL
