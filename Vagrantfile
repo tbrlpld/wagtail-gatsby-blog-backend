@@ -75,14 +75,15 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   # SHELL
   config.vm.provision "shell", inline: <<-SHELL
+    /vagrant/server/install_docker.sh
+    /vagrant/server/install_nginx.sh
+    /vagrant/server/configure_nginx.sh
+    /vagrant/server/configure_ufw.sh
+    /vagrant/server/configure_docker.sh
+
     /vagrant/script/dist.sh
     tar -xf /vagrant/dist/dist.tar.gz -C /home/dockrunner/app
     cd /home/dockrunner/app
     chown -R dockrunner:dockrunner .
-    chmod +x ./server/*.sh
-    ./server/install_docker.sh
-    ./server/install_nginx.sh
-    ./server/configure_nginx.sh
-    ./server/configure_ufw.sh
   SHELL
 end
