@@ -12,7 +12,7 @@ server {
 
         expires 365d;
 
-        proxy_pass http://127.0.0.1:9000;
+        proxy_pass http://127.0.0.1:8102;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
@@ -24,7 +24,7 @@ server {
 
         expires 365d;
 
-        proxy_pass http://127.0.0.1:9000;
+        proxy_pass http://127.0.0.1:8102;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
@@ -40,7 +40,7 @@ server {
         uwsgi_buffers   8 256k;
         uwsgi_read_timeout 300;
 
-        proxy_pass http://127.0.0.1:8000;
+        proxy_pass http://127.0.0.1:8101;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;

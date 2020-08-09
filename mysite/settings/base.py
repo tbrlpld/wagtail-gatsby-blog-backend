@@ -171,7 +171,7 @@ WAGTAIL_MODERATION_ENABLED = False
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://example.com'
+BASE_URL = 'http://localhost:8080'
 
 
 # Grapple settings
@@ -188,13 +188,14 @@ GRAPPLE_ADD_SEARCH_HIT = False
 # Headless preview
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8001",
+    BASE_URL,
+    "http://localhost:9000",
 ]
 CORS_URLS_REGEX = r'^/graphql.*$'
 
 HEADLESS_PREVIEW_CLIENT_URLS = {
-    "default": "http://localhost:8001/preview",
+    "default": "http://localhost:9000/preview",
 }
 
 # Headless serve
-HEADLESS_SERVE_BASE_URL = "http://localhost:8001"
+HEADLESS_SERVE_BASE_URL = "http://localhost:9000"

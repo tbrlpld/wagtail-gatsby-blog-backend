@@ -10,7 +10,7 @@ services:
         # command: Not needed. Already defined in Dockerfile
         restart: "no"  # probably not in development
         ports: 
-            - "127.0.0.1:8000:8000"
+            - "127.0.0.1:8080:8000"
         volumes:
             - ./:/code/
 
