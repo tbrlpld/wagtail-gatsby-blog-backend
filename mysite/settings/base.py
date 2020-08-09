@@ -191,11 +191,11 @@ CORS_ORIGIN_WHITELIST = [
     BASE_URL,
     "http://localhost:9000",
 ]
-CORS_URLS_REGEX = r'^/graphql.*$'
+CORS_URLS_REGEX = r'^/cms/graphql.*$'
 
 HEADLESS_PREVIEW_CLIENT_URLS = {
-    "default": "http://localhost:9000/preview",
+    "default": BASE_URL + "/preview",
 }
 
 # Headless serve
-HEADLESS_SERVE_BASE_URL = "http://localhost:9000"
+HEADLESS_SERVE_BASE_URL = BASE_URL
