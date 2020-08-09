@@ -3,7 +3,7 @@ services:
     wagtail:
         build: 
             context: ./
-            dockerfile: Dockerfile
+            dockerfile: ./docker/wagtail/Dockerfile
         image: wagtail-gatsby-blog-wagtail:production
         container_name: wagtail-gatsby-blog-wagtail
         env_file:
@@ -18,7 +18,7 @@ services:
             - appnet
     nginx:
         build:
-            context: ./container/nginx
+            context: ./docker/nginx
         image: wagtail-gatsby-blog-nginx:production
         container_name: wagtail-gatsby-blog-nginx
         depends_on:
