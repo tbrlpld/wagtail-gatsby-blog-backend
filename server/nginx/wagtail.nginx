@@ -1,6 +1,6 @@
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80;
+    listen [::]:80;
 
     server_name localhost;
 
@@ -8,7 +8,7 @@ server {
     charset utf-8;
     client_max_body_size 150M;
 
-    location /cms/static {
+    location /media {
         gzip            on;
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;
@@ -20,7 +20,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
     }
-    location /cms/media {
+    location /cms/static {
         gzip            on;
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;

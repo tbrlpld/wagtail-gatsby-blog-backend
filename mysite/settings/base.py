@@ -161,7 +161,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'data', 'static')
 STATIC_URL = '/cms/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'data', 'media')
-MEDIA_URL = '/cms/media/'
+MEDIA_URL = '/media/'
 
 
 # Wagtail settings
