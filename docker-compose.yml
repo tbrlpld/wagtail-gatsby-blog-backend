@@ -1,29 +1,40 @@
 version: "3.8"
 services:
-    backend:
+    wagtail:
         build: 
             context: ./
             dockerfile: Dockerfile
+        image: wagtail-gatsby-blog-wagtail:production
+        container_name: wagtail-gatsby-blog-wagtail
         env_file:
             - .env
-        image: wagtail-gatsby-blog-backend
         # command: Not needed. Already defined in Dockerfile
         restart: unless-stopped
         ports: 
             - "127.0.0.1:8000:8000"
         volumes:
             - appdata:/code/data
-    static:
+        networks:
+            - appnet
+    nginx:
         build:
             context: ./container/nginx
+        image: wagtail-gatsby-blog-nginx:production
+        container_name: wagtail-gatsby-blog-nginx
         depends_on:
-            - backend
-        image: wagtail-gatsby-blog-nginx
+            - wagtail
         restart: unless-stopped
         ports: 
             - "127.0.0.1:9000:80"
         volumes:
             - appdata:/code/data
+        networks:
+            - appnet
 
 volumes:
     appdata:
+        name: wagtail-gatsby-blog-data
+
+networks:
+    appnet:
+        name: wagtail-gatsby-blog-network
