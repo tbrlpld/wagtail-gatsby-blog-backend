@@ -27,12 +27,5 @@ tar --append --file=$tarfile .env docker-compose.yml
 # Compress archive
 gzip $tarfile
 
-# Extract (this is only to check the contents)
-if [ "$1" = "-x" ]
-then
-	mkdir $distdir/app
-	tar -xzf $tarfile.gz -C $distdir/app
-fi
-
 # Return to initial working directory
 cd $initialdir

@@ -8,6 +8,8 @@ services:
         container_name: wagtail-gatsby-blog-wagtail
         env_file:
             - .env
+        environment:
+            - DJANGO_SETTINGS_MODULE=mysite.settings.production
         # command: Not needed. Already defined in Dockerfile
         restart: unless-stopped
         ports: 
