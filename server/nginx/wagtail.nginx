@@ -1,11 +1,14 @@
 server {
-    listen 80;
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
     server_name localhost;
+
     server_tokens off;
     charset utf-8;
     client_max_body_size 150M;
 
-    location /static {
+    location /cms/static {
         gzip            on;
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;
@@ -17,7 +20,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
     }
-    location /media {
+    location /cms/media {
         gzip            on;
         gzip_buffers    8 256k;
         uwsgi_buffers   8 256k;
@@ -29,7 +32,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
     }
-    location / {
+    location /cms {
         try_files $uri @yourapplication;
     }
     location @yourapplication {
@@ -44,5 +47,9 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
+    }
+
+    location / {
+        try_files $uri $uri =404;
     }
 }

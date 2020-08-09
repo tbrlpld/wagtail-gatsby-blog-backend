@@ -158,10 +158,10 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'data', 'static')
-STATIC_URL = '/static/'
+STATIC_URL = '/cms/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'data', 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/cms/media/'
 
 
 # Wagtail settings
