@@ -4,7 +4,7 @@ on: [push]
 jobs:
   build:
     name: Greeting
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - name: Hello world
         uses: actions/hello-world-javascript-action@v1

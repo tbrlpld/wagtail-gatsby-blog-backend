@@ -1,5 +1,7 @@
 # Wagtail Gatsby Blog (Backend)
 
+![example workflow file path](https://github.com/tbrlpld/wagtail-gatsby-blog-backend/.github/workflows/first-workflow.yml/badge.svg)
+
 Example project for me to figure out how to connect Wagtail as CMS on the
 backend with Gatsby for the frontend.
 
