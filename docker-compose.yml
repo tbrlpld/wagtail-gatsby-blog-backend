@@ -1,17 +1,42 @@
 version: "3.8"
 services:
-    backend:
-        env_file: 
-            - .env
+    wagtail:
         build: 
             context: ./
-            dockerfile: Dockerfile
-        image: wagtail-gatsby-blog-backend
+            dockerfile: ./docker/wagtail/Dockerfile
+        image: wagtail-gatsby-blog-wagtail:production
+        container_name: wagtail-gatsby-blog-wagtail
+        env_file:
+            - .env
+        environment:
+            - DJANGO_SETTINGS_MODULE=mysite.settings.production
         # command: Not needed. Already defined in Dockerfile
         restart: unless-stopped
         ports: 
-            - "127.0.0.1:8000:8000"
+            - "127.0.0.1:8101:8000"
         volumes:
-            - /code/.git
-            - ./:/code/
+            - appdata:/code/data
+        networks:
+            - appnet
+    nginx:
+        build:
+            context: ./docker/nginx
+        image: wagtail-gatsby-blog-nginx:production
+        container_name: wagtail-gatsby-blog-nginx
+        depends_on:
+            - wagtail
+        restart: unless-stopped
+        ports: 
+            - "127.0.0.1:8102:80"
+        volumes:
+            - appdata:/code/data:ro
+        networks:
+            - appnet
 
+volumes:
+    appdata:
+        name: wagtail-gatsby-blog-data
+
+networks:
+    appnet:
+        name: wagtail-gatsby-blog-network

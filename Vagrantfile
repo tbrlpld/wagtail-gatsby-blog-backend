@@ -75,12 +75,27 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   # SHELL
   config.vm.provision "shell", inline: <<-SHELL
-    /vagrant/script/dist.sh -x
-    cd /vagrant/dist/app
-    chmod +x /vagrant/dist/app/server/*.sh
-    ./server/install_docker.sh
-    ./server/install_nginx.sh
-    ./server/configure_nginx.sh
-    ./server/configure_ufw.sh
+    echo "*** Distribute data to server ***"
+    /vagrant/script/dist.sh
+    rm -r /home/vagrant/app/
+    mkdir /home/vagrant/app/
+    chown -R vagrant:vagrant /home/vagrant/app
+    tar -xf /vagrant/dist/dist.tar.gz -C /home/vagrant/app
+    
+    echo "*** Configure server setup ***"
+    /home/vagrant/app/server/install_docker.sh
+    /home/vagrant/app/server/install_nginx.sh
+    /home/vagrant/app/server/configure_nginx.sh
+    /home/vagrant/app/server/configure_ufw.sh
+    /home/vagrant/app/server/configure_docker.sh
+
+    # This step would typically happen on the CI and the image could just be downloaded.
+    echo "*** Build production image ***"
+    runuser -l dockrunner -c 'docker-compose -f /vagrant/docker-compose.yml build'
+
+    echo "*** Provide data to user dockrunner ***"
+    cp -r /home/vagrant/app /home/dockrunner/app
+    chown -R dockrunner:dockrunner /home/dockrunner/app
+    /home/dockrunner/app/server/data_to_container.sh
   SHELL
 end

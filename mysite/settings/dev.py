@@ -13,6 +13,16 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 BASE_URL = 'http://localhost:8000'
 
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:9000",
+]
+HEADLESS_PREVIEW_CLIENT_URLS = {
+    "default": "http://localhost:9000/preview",
+}
+
+# Headless serve
+HEADLESS_SERVE_BASE_URL = "http://localhost:9000"
+
 try:
     from .local import *
 except ImportError:

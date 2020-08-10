@@ -20,19 +20,12 @@ mkdir $distdir
 
 tarfile=$distdir/dist.tar
 # Add all files in the base dir, except for the ones listed in .dockerignore
-tar --create --file=$tarfile --exclude=./dist --exclude-from=.dockerignore .
+tar --create --file=$tarfile ./data ./server ./docker
 # tar ignores .dotfiles by default, so I have to add them back manually.
 # Add the .env file explicitly (this file is usually ignored)
-tar --append --file=$tarfile .env .gitignore .dockerignore .python-version
+tar --append --file=$tarfile .env docker-compose.yml
 # Compress archive
 gzip $tarfile
-
-# Extract (this is only to check the contents)
-if [ "$1" = "-x" ]
-then
-	mkdir $distdir/app
-	tar -xzf $tarfile.gz -C $distdir/app
-fi
 
 # Return to initial working directory
 cd $initialdir

@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'data', 'db.sqlite3'),
     }
 }
 
@@ -157,10 +157,10 @@ STATICFILES_DIRS = [
 # See https://docs.djangoproject.com/en/2.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'data', 'static')
+STATIC_URL = '/cms/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'data', 'media')
 MEDIA_URL = '/media/'
 
 
@@ -171,7 +171,7 @@ WAGTAIL_MODERATION_ENABLED = False
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://example.com'
+BASE_URL = 'http://localhost:8080'
 
 
 # Grapple settings
@@ -188,13 +188,14 @@ GRAPPLE_ADD_SEARCH_HIT = False
 # Headless preview
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8001",
+    BASE_URL,
+    "http://localhost:9000",
 ]
-CORS_URLS_REGEX = r'^/graphql.*$'
+CORS_URLS_REGEX = r'^/cms/graphql.*$'
 
 HEADLESS_PREVIEW_CLIENT_URLS = {
-    "default": "http://localhost:8001/preview",
+    "default": BASE_URL + "/preview",
 }
 
 # Headless serve
-HEADLESS_SERVE_BASE_URL = "http://localhost:8001"
+HEADLESS_SERVE_BASE_URL = BASE_URL
