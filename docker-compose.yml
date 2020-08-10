@@ -1,10 +1,10 @@
 version: "3.8"
 services:
     wagtail:
-        build: 
-            context: ./
-            dockerfile: ./docker/wagtail/Dockerfile
-        image: wagtail-gatsby-blog-wagtail:production
+        # build: 
+        #     context: ./
+        #     dockerfile: ./docker/wagtail/Dockerfile
+        image: tbrlpld/wagtail-gatsby-blog-wagtail:production
         container_name: wagtail-gatsby-blog-wagtail
         env_file:
             - .env
@@ -19,9 +19,9 @@ services:
         networks:
             - appnet
     nginx:
-        build:
-            context: ./docker/nginx
-        image: wagtail-gatsby-blog-nginx:production
+        # build:
+        #     context: ./docker/nginx
+        image: tbrlpld/wagtail-gatsby-blog-nginx:production
         container_name: wagtail-gatsby-blog-nginx
         depends_on:
             - wagtail

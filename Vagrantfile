@@ -89,13 +89,11 @@ Vagrant.configure("2") do |config|
     /home/vagrant/app/server/configure_ufw.sh
     /home/vagrant/app/server/configure_docker.sh
 
-    # This step would typically happen on the CI and the image could just be downloaded.
-    echo "*** Build production image ***"
-    runuser -l dockrunner -c 'docker-compose -f /vagrant/docker-compose.yml build'
-
     echo "*** Provide data to user dockrunner ***"
-    cp -r /home/vagrant/app /home/dockrunner/app
+    cp -r /home/vagrant/app/* /home/dockrunner/app/
     chown -R dockrunner:dockrunner /home/dockrunner/app
-    /home/dockrunner/app/server/data_to_container.sh
+
+    # echo "*** Add data to container ***"
+    # /home/dockrunner/app/server/data_to_container.sh
   SHELL
 end

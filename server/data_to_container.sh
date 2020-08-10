@@ -12,7 +12,8 @@ fi
 scriptdir=$(realpath $(dirname $0))
 basedir=$(realpath $(dirname $scriptdir))
 
-docker-compose -f $basedir/docker-compose.yml up --no-start --no-build
+docker-compose -f $basedir/docker-compose.yml pull
+docker-compose -f $basedir/docker-compose.yml up --no-start
 docker cp $basedir/data wagtail-gatsby-blog-wagtail:/code
 
 # Leave shell of user dockrunner if switched to automatically
