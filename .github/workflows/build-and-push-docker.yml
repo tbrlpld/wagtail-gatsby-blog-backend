@@ -21,3 +21,13 @@ jobs:
           tags: latest, production
           path: .
           dockerfile: ./docker/wagtail/Dockerfile
+
+      - name: Build and push nginx image
+        uses: docker/build-push-action@v1.1.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_USERNAME }}/wagtail-gatsby-blog-nginx
+          tags: latest, production
+          path: ./docker/nginx
+          dockerfile: ./docker/nginx/Dockerfile
