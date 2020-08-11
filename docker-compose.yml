@@ -29,7 +29,7 @@ services:
         ports: 
             - "127.0.0.1:8102:80"
         volumes:
-            - appdata:/code/data:ro
+            - appdata:/code/data
         networks:
             - appnet
 
