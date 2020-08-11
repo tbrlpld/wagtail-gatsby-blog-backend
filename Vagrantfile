@@ -93,7 +93,7 @@ Vagrant.configure("2") do |config|
     cp -r /home/vagrant/app/* /home/dockrunner/app/
     chown -R dockrunner:dockrunner /home/dockrunner/app
 
-    # echo "*** Add data to container ***"
-    # /home/dockrunner/app/server/data_to_container.sh
+    echo "*** Add data to container ***"
+    /home/dockrunner/app/server/data_to_container.sh
   SHELL
 end
