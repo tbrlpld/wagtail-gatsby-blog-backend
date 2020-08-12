@@ -13,6 +13,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{secrets.SSH_PRIVATE_KEY}}" >> ~/.ssh/id_rsa
+          chmod -R 700 ~/.ssh
           eval `ssh-agent`
           ssh-add ~/.ssh/id_rsa
           ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa echo "Hello from host."
