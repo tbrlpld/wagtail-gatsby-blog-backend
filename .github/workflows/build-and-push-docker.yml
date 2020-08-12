@@ -36,7 +36,7 @@ jobs:
     needs: build
     runs-on: ubuntu-18.04
     steps:
-      - name: Setup ssh configuration
+      - name: Setup ssh and update production server
         run: |
           mkdir -p ~/.ssh
           eval $(ssh-agent -s) 
@@ -44,13 +44,8 @@ jobs:
           echo "${{secrets.REMOTE_KNOWN_HOST}}" > ~/.ssh/known_hosts 
           chmod -R 700 ~/.ssh
           ssh-add <(echo "${{secrets.SSH_PRIVATE_KEY}}") 
-      - name: Download new images
-        run: ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml pull
-      - name: Teardown running containers
-        run: ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml down
-      - name: Start new containers
-        run: ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml up -d
-      - name: Remove ssh configutation
-        run: |
+          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml pull -q
+          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml down
+          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml up -d
           ssh-agent -k
           rm -rf ~/.ssh
