@@ -11,8 +11,9 @@ jobs:
     steps:
       - name: Login to production server
         run: |
+          ssh-keyscan {{secrets.REMOTE_HOST}} -p 22 -t rsa
           mkdir -p ~/.ssh
-          echo "${{secrets.SSH_PRIVATE_KEY}}" >> ~/.ssh/id_rsa
+          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/id_rsa
           chmod -R 700 ~/.ssh
           eval `ssh-agent`
           ssh-add ~/.ssh/id_rsa
