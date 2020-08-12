@@ -1,5 +1,7 @@
 # Wagtail Gatsby Blog (Backend)
 
+Just a stupid update to test master protection
+
 ![example workflow file path](https://github.com/tbrlpld/wagtail-gatsby-blog-backend/workflows/Greet%20Everyone/badge.svg)
 
 Example project for me to figure out how to connect Wagtail as CMS on the
