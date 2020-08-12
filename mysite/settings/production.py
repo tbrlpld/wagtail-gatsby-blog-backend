@@ -6,7 +6,7 @@ DEBUG = False
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-BASE_URL = 'http://test.lpld.io'
+BASE_URL = 'https://test.lpld.io'
 
 ALLOWED_HOSTS = [
     'localhost',
