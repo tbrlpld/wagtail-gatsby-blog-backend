@@ -1,6 +1,6 @@
 # Wagtail Gatsby Blog (Backend)
 
-Just a stupid update to test master protection
+Another change to test the protection. This time it should also apply to admins.
 
 ![example workflow file path](https://github.com/tbrlpld/wagtail-gatsby-blog-backend/workflows/Greet%20Everyone/badge.svg)
 
