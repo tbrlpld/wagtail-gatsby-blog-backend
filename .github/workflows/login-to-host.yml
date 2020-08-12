@@ -1,0 +1,15 @@
+name: Login to remote host
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Login to remote host
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Login to production server
+        run: |
+          echo "${{secrets.SSH_PRIVATE_KEY}}" >> ~/.ssh/id_rsa
+          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa echo "Hello from host."

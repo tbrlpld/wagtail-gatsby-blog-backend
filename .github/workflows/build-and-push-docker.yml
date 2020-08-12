@@ -33,3 +33,8 @@ jobs:
           path: ./docker/nginx
           dockerfile: ./docker/nginx/Dockerfile
           cache_froms: ${{ secrets.DOCKER_USERNAME }}/wagtail-gatsby-blog-nginx:latest
+
+      - name: Login to production server
+        run: |
+          echo "${{secrets.SSH_PRIVATE_KEY}}" >> ~/.ssh/id_rsa
+          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa echo "Hello from host."
