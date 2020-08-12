@@ -2,7 +2,7 @@ name: Update Production Server
 on: 
   push:
     branches:
-      - master
+      - production
 
 jobs:
   build:
