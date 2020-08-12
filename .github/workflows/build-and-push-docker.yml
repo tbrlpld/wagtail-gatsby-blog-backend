@@ -45,5 +45,5 @@ jobs:
           ssh-add ~/.ssh/id_rsa
           ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml pull
           ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml down
-          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml up
+          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml up -d
           rm -rf ~/.ssh
