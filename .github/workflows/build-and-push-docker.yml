@@ -6,13 +6,13 @@ on:
 
 jobs:
   build:
-    name: Build and Push
+    name: Docker Images (Build and Push)
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Wagtail image
+      - name: Wagtail image (build and push)
         uses: docker/build-push-action@v1.1.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -23,7 +23,7 @@ jobs:
           dockerfile: ./docker/wagtail/Dockerfile
           cache_froms: ${{ secrets.DOCKER_USERNAME }}/wagtail-gatsby-blog-wagtail:latest
 
-      - name: Nginx image
+      - name: Nginx image (build and push)
         uses: docker/build-push-action@v1.1.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -34,7 +34,12 @@ jobs:
           dockerfile: ./docker/nginx/Dockerfile
           cache_froms: ${{ secrets.DOCKER_USERNAME }}/wagtail-gatsby-blog-nginx:latest
 
-      - name: Update running container on production server
+  update:
+    name: Update Production Server
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Setup ssh configuration
         run: |
           mkdir -p ~/.ssh
           eval $(ssh-agent -s) 
@@ -42,8 +47,17 @@ jobs:
           echo "${{secrets.REMOTE_KNOWN_HOST}}" > ~/.ssh/known_hosts 
           chmod -R 700 ~/.ssh
           ssh-add <(echo "${{secrets.SSH_PRIVATE_KEY}}") 
-          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml pull
-          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml down
-          ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml up -d
+
+      - name: Download new images
+        run: ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml pull
+
+      - name: Teardown running containers
+        run: ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml down
+
+      - name: Start new containers
+        run: ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml up -d
+
+      - name: Remove ssh configutation
+        run: |
           ssh-agent -k
           rm -rf ~/.ssh
