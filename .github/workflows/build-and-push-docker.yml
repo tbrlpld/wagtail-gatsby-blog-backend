@@ -1,4 +1,4 @@
-name: Build and push production Docker images
+name: Update production server
 on: 
   push:
     branches:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build and push wagtail image
+      - name: Wagtail image
         uses: docker/build-push-action@v1.1.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -23,7 +23,7 @@ jobs:
           dockerfile: ./docker/wagtail/Dockerfile
           cache_froms: ${{ secrets.DOCKER_USERNAME }}/wagtail-gatsby-blog-wagtail:latest
 
-      - name: Build and push nginx image
+      - name: Nginx image
         uses: docker/build-push-action@v1.1.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -34,16 +34,16 @@ jobs:
           dockerfile: ./docker/nginx/Dockerfile
           cache_froms: ${{ secrets.DOCKER_USERNAME }}/wagtail-gatsby-blog-nginx:latest
 
-      - name: Update running container on remote host
+      - name: Update running container on production server
         run: |
-          ssh-keyscan -p 22 -t rsa ${{secrets.REMOTE_HOST}} 
           mkdir -p ~/.ssh
+          eval $(ssh-agent -s) 
+          ssh-keyscan -p 22 -t rsa ${{secrets.REMOTE_HOST}} 
           echo "${{secrets.REMOTE_KNOWN_HOST}}" > ~/.ssh/known_hosts 
-          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/id_rsa
           chmod -R 700 ~/.ssh
-          eval `ssh-agent`
-          ssh-add ~/.ssh/id_rsa
+          ssh-add <(echo "${{secrets.SSH_PRIVATE_KEY}}") 
           ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml pull
           ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml down
           ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml up -d
+          ssh-agent -k
           rm -rf ~/.ssh
