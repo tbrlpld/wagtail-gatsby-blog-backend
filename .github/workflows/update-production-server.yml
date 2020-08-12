@@ -42,7 +42,7 @@ jobs:
           eval $(ssh-agent -s) 
           ssh-keyscan -p 22 -t rsa ${{secrets.REMOTE_HOST}} 
           echo "${{secrets.REMOTE_KNOWN_HOST}}" > ~/.ssh/known_hosts 
-          echo "${{secrets.REMOTE_KNOWN_HOST}}" > ~/.ssh/id_rsa 
+          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/id_rsa 
           chmod -R 700 ~/.ssh
           ssh-add ~/.ssh/id_rsa 
           ssh ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} -i ~/.ssh/id_rsa docker-compose -f ${{secrets.REMOTE_HOST_PROJECT_DIR}}/docker-compose.yml pull -q
