@@ -1,7 +1,9 @@
 .git
 .vagrant
 .venv
+__pycache__
 .env
 dist
 data
-__pycache__
+server
+Vagrantfile
