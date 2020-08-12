@@ -77,23 +77,16 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     echo "*** Distribute data to server ***"
     /vagrant/script/dist.sh
-    rm -r /home/vagrant/app/
-    mkdir /home/vagrant/app/
-    chown -R vagrant:vagrant /home/vagrant/app
-    tar -xf /vagrant/dist/dist.tar.gz -C /home/vagrant/app
-    
-    echo "*** Configure server setup ***"
-    /home/vagrant/app/server/install_docker.sh
-    /home/vagrant/app/server/install_nginx.sh
-    /home/vagrant/app/server/configure_nginx.sh
-    /home/vagrant/app/server/configure_ufw.sh
-    /home/vagrant/app/server/configure_docker.sh
+    cp /vagrant/dist/dist.tar.gz /home/vagrant/
 
-    echo "*** Provide data to user dockrunner ***"
-    cp -r /home/vagrant/app/* /home/dockrunner/app/
-    chown -R dockrunner:dockrunner /home/dockrunner/app
+    echo "*** Extract data to dockrunner home ***"
+    # This could really be any other directory too. The provisioning process will set dockrunner to owner.
+    rm -r /home/dockrunner/app/
+    mkdir -p /home/dockrunner/app/
+    tar -xf /home/vagrant/dist.tar.gz -C /home/dockrunner/app
+    cd /home/dockrunner/app
 
-    echo "*** Add data to container ***"
-    /home/dockrunner/app/server/data_to_container.sh
+    echo "*** Run server provisioning ***"
+    ./server/provision.sh
   SHELL
 end
