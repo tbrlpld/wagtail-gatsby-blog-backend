@@ -14,4 +14,4 @@ cp $scriptdir/nginx/wagtail.nginx /etc/nginx/sites-enabled/wagtail.nginx
 # Update service
 systemctl enable nginx
 systemctl restart nginx
-systemctl status nginx
+systemctl status nginx -a | cat

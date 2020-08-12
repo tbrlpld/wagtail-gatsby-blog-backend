@@ -25,4 +25,4 @@ then
 else 
 	echo "User namespace remapping already configured for docker."
 fi
-
+systemctl status docker -a | cat
