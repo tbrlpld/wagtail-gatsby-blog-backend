@@ -1,4 +1,5 @@
 .git
+.github
 .vagrant
 .venv
 __pycache__
