@@ -1,4 +1,7 @@
 #!/bin/bash
+# Start cron 
+cron
+# Start wagtail
 export VENV=$(poetry env info --path)
 if [ "$DJANGO_SETTINGS_MODULE" = "mysite.settings.dev" ]  
 then 
