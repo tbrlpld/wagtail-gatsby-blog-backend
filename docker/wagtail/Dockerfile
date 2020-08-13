@@ -2,6 +2,14 @@
 FROM python:3.7
 LABEL maintainer="tibor@lpld.io"
 
+# Install cron and configure cron
+COPY ./docker/wagtail/testcron /etc/cron.d/testcron 
+RUN apt-get update -qq \
+	&& apt-get -y install -qq cron \
+	&& chmod 0644 /etc/cron.d/testcron \
+	&& crontab /etc/cron.d/testcron \
+	&& touch /var/log/cron.log
+
 # Set the working directory to /code/
 WORKDIR /code/
 
