@@ -2,7 +2,7 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name localhost;
+    server_name localhost test.lpld.io testcms.lpld.io;
 
     server_tokens off;
     charset utf-8;

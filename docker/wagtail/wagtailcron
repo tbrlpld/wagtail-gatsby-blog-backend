@@ -1,1 +1,1 @@
-0 * * * * /code/container/publish_scheduled_pages.sh  >> /var/log/cron.log 2>&1
+0 * * * * /code/container/publish_scheduled_pages.sh  >> /code/data/cron.log 2> /code/data/cron.err
