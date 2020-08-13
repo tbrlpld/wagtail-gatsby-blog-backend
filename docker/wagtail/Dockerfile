@@ -8,8 +8,7 @@ COPY ./docker/wagtail/wagtailcron /etc/cron.d/wagtailcron
 RUN apt-get update -qq \
 	&& apt-get -y install -qq cron \
 	&& chmod 0644 /etc/cron.d/wagtailcron \
-	&& crontab /etc/cron.d/wagtailcron \
-	&& touch /var/log/cron.log
+	&& crontab /etc/cron.d/wagtailcron
 
 # Set the working directory to /code/
 WORKDIR /code/
