@@ -32,7 +32,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
     }
-    location /cms {
+    location / {
         try_files $uri @yourapplication;
     }
     location @yourapplication {
@@ -47,9 +47,5 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Protocol $scheme;
-    }
-
-    location / {
-        try_files $uri $uri =404;
     }
 }
