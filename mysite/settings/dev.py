@@ -13,9 +13,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 BASE_URL = 'http://localhost:8000'
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:9000",
-]
 HEADLESS_PREVIEW_CLIENT_URLS = {
     "default": "http://localhost:9000/preview",
 }
