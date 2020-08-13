@@ -171,8 +171,7 @@ WAGTAIL_MODERATION_ENABLED = False
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://localhost:8080'
-
+BASE_URL = 'https://test.lpld.io'
 
 # Grapple settings
 GRAPHENE = {
@@ -189,10 +188,10 @@ GRAPPLE_ADD_SEARCH_HIT = False
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
     BASE_URL,
+    # Allow running production config locally and using local front end.
     "http://localhost:9000",
 ]
 CORS_URLS_REGEX = r'^/cms/graphql.*$'
-
 HEADLESS_PREVIEW_CLIENT_URLS = {
     "default": BASE_URL + "/preview",
 }
