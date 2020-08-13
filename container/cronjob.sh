@@ -1,1 +1,0 @@
-echo TEST >> /code/text.txt

@@ -3,11 +3,12 @@ FROM python:3.7
 LABEL maintainer="tibor@lpld.io"
 
 # Install cron and configure cron
-COPY ./docker/wagtail/testcron /etc/cron.d/testcron 
+# https://stackoverflow.com/questions/37458287/how-to-run-a-cron-job-inside-a-docker-container
+COPY ./docker/wagtail/wagtailcron /etc/cron.d/wagtailcron 
 RUN apt-get update -qq \
 	&& apt-get -y install -qq cron \
-	&& chmod 0644 /etc/cron.d/testcron \
-	&& crontab /etc/cron.d/testcron \
+	&& chmod 0644 /etc/cron.d/wagtailcron \
+	&& crontab /etc/cron.d/wagtailcron \
 	&& touch /var/log/cron.log
 
 # Set the working directory to /code/
