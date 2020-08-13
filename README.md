@@ -37,8 +37,13 @@ locally in the `data/db.sqlite` and in the `data/media` directories.
 This data is packaged by the `dist.sh` script. This means the data is available
 on the host after the archive is extracted.
 
-Also, you need to define a `SECRET_KEY` that Django needs as a cryptography
-salt.
+The packing will include a locally available `.env` file. This file should be
+configured for production before generating the distribution package. This file
+may also be empty and be configured on the production host. It's only real
+purpose is to define the `SECRET_KEY` environment variable in production that
+Django needs as a cryptography salt. Other settings set typically through
+environment variables that are not sensitive are set in the `docker-compose.yml`.
+
 
 ## Simulating the Production Setup
 
@@ -50,7 +55,7 @@ of those steps are performed by the scripts in the `/server` directory. This
 directory is contained in the `dist.tar.gz` archive.
 
 During provisioning, the `dist.sh` script packages the data. This package is
-then extracted into `/home/vagrant/app`. This is simulating the copying to the
+then extracted into `/home/dockrunner/app`. This is simulating the copying to the
 server and extracting of the data with your non-root sudo user.
 
 The following steps are basically just running the scripts in the `./server`
@@ -60,32 +65,35 @@ and configure `docker`, `nginx` and `ufw`.
 The first script also create the `dockrunner` user. This name is important as
 it is used in the other docker configuration steps. The user name could be
 anything else. It is only important that the user name is kept consistent
-between the script concerning the docker configuration.
+between the script concerning the docker configuration. The `dockrunner`
+user, which is created during the provisioning, has a restricted login shell.
+This means the user will only be able to execute a very limited set of commands.
 
 Once the provisioning is done and you login to the VM with `vagrant ssh` you
-should switch to the `dockrunner` user with `su - dockrunner`. You might have to
-set a password for `dockrunner` (with `sudp passwd dockrunner`) before you can
-login to the user. Or you do not set a password and run commands as the user
-from your sudo user.
+should switch to the `dockrunner` user with `sudo -u dockrunner -i`. This will
+give you the restricted shell experience that this user would experience after
+login. If you do need to run unrestricted commands as the typically restricted
+user, you can start a different like so `sudo -u dockrunner bash`. This of
+course is only possible from a `sudo` user account.
 
-You can now start serving Wagtail by changing into `/home/dockrunner/app` and
-running following commands.
+To start serving the backend as the `dockrunner` user (which will always be
+logged into it's home directory and is not allowed to switch directories) by
+running following command.
 
 ```shell
-$ cd /vagrant/dist/app
-$ docker-compose build
-$ docker-compose up -d
+$ docker-compose -f ./app/docker-compose.yml up -d --no-build
 ```
 
 The container is running in detached mode and is set to restart automatically,
 unless it is stopped explicitly. When the host restarts, then the Docker daemon
 will restart automatically and then restart the container automatically.
 
-The Vagrant machine is configured with port forwarding from `8080` on the host
-to `80` on the VM. That means to test the backend setup, you can visit
-`http://localhost:8080/cms` in the browser.
+The Vagrant machine is configured with port forwarding from `8000` on the host
+to `80` on the VM. That means to test production the backend setup, you can be
+visited at `http://localhost:8000/cms` in the browser.
 
 If you make changes to the code base that you want to test in a production
-like configuration, just stop the container on the VM with `docker-compose down`
-and then on the host rerun the provisioning `vagrant provision`.
-This will rebuild the container images on the VM that can then be started again.
+like configuration, you will need to build the images manually on the VM. This
+can be achieved by starting an unrestricted shell for `dockrunner` with
+`sudo -u dockrunner bash`, then `cd /vagrant` to switch to the shared
+directory and run `docker-compose build`.
