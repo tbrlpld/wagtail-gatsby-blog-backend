@@ -171,7 +171,11 @@ WAGTAIL_MODERATION_ENABLED = False
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'https://test.lpld.io'
+#
+# This needs to be the actual server domain, so that during the headless build
+# the images are available from the backend. If this would be the frontend domain
+# then the generated image URLs do not exist during build.
+BASE_URL = 'https://testcms.lpld.io'
 
 # Grapple settings
 GRAPHENE = {
@@ -197,4 +201,4 @@ HEADLESS_PREVIEW_CLIENT_URLS = {
 }
 
 # Headless serve
-HEADLESS_SERVE_BASE_URL = BASE_URL
+HEADLESS_SERVE_BASE_URL = 'https://test.lpld.io'
