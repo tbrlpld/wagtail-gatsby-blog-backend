@@ -177,6 +177,8 @@ WAGTAIL_MODERATION_ENABLED = False
 # then the generated image URLs do not exist during build.
 BASE_URL = 'https://testcms.lpld.io'
 
+FRONTEND_BASE_URL = 'https://test.lpld.io'
+
 # Grapple settings
 GRAPHENE = {
     # 'SCHEMA': 'grapple.schema.schema',
@@ -191,14 +193,14 @@ GRAPPLE_ADD_SEARCH_HIT = False
 # Headless preview
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    BASE_URL,
-    # Allow running production config locally and using local front end.
+    FRONTEND_BASE_URL,
+    # Allow running production config locally in VM and using local front end.
     "http://localhost:9000",
 ]
 CORS_URLS_REGEX = r'^/cms/graphql.*$'
 HEADLESS_PREVIEW_CLIENT_URLS = {
-    "default": BASE_URL + "/preview",
+    "default": FRONTEND_BASE_URL + '/preview',
 }
 
 # Headless serve
-HEADLESS_SERVE_BASE_URL = 'https://test.lpld.io'
+HEADLESS_SERVE_BASE_URL = FRONTEND_BASE_URL
