@@ -9,6 +9,14 @@ import grapple
 
 
 def get_document_url(cls):
+    """
+    Create qualified URL on which a document is accessible.
+
+    Basically copied from:
+    https://github.com/GrappleGQL/wagtail-grapple/blob/
+    569b05d73282bee41b6c0509d413638b1aa9b040/grapple/types/images.py#L19
+
+    """
     url = ''
     if hasattr(cls, 'url'):
         url = cls.url
