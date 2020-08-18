@@ -1,1 +1,1 @@
-* * * * * /code/container/publish_scheduled_pages.sh  >> /code/data/cron.log 2>&1 
+*/15 * * * * /code/container/publish_scheduled_pages.sh  >> /code/data/cron.log 2>&1 
