@@ -36,3 +36,4 @@ def trigger_netlify_build_hook(sender, **kwargs):
 
 
 wtcsig.page_published.connect(trigger_netlify_build_hook)
+wtcsig.page_unpublished.connect(trigger_netlify_build_hook)
