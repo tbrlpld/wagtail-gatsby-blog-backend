@@ -97,3 +97,21 @@ like configuration, you will need to build the images manually on the VM. This
 can be achieved by starting an unrestricted shell for `dockrunner` with
 `sudo -u dockrunner bash`, then `cd /vagrant` to switch to the shared
 directory and run `docker-compose build`.
+
+## Production Configuration
+
+The production configuration requires two environment variables to be set.
+
+`SECRET_KEY` is critical and must exist otherwise the app won't start. this
+is the encryption salt used by Django to secure the sessions with the backend.
+
+`NETLIFY_BUILD_HOOK_URL` is not required, but certainly recommended. This URL
+is triggered whenever a page is published on the backend and results in a rebuild
+of the Gatsby frontend. The app will start without this variable, but then
+each build of the frontend needs to be triggered manually. This means that
+publishing a page on the in Wagtail does not really result in a published page
+on the frontend.
+
+Both these variables can be defined in a `.env` file the lives next to the
+`docker-compose.yml` on the production host. These variables are available in
+the Wagtail container environment when it is started through the compose file.

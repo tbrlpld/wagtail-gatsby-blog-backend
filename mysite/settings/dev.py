@@ -11,6 +11,8 @@ ALLOWED_HOSTS = ['*']
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+LOGGING['root']['level'] = 'DEBUG'
+
 BASE_URL = 'http://localhost:8000'
 
 HEADLESS_PREVIEW_CLIENT_URLS = {
