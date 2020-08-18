@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'search',
     'blog',
     'tagging',
+    'mysite.signals',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -138,6 +139,22 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+}
 
 
 # Static files (CSS, JavaScript, Images)
