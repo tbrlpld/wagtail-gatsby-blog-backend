@@ -16,6 +16,7 @@ services:
             - "127.0.0.1:8101:8000"
         volumes:
             - appdata:/code/data
+            - ./.env:/code/.env
         networks:
             - appnet
     nginx:
